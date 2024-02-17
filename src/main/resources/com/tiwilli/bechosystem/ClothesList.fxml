@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label text="Roupas">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets left="10.0" top="5.0" />
+         </padding>
+      </Label>
+      <ToolBar prefHeight="53.0" prefWidth="600.0">
+        <items>
+          <Button mnemonicParsing="false" text="Cadastrar Item">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Button>
+        </items>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets bottom="20.0" left="5.0" top="20.0" />
+         </padding>
+      </ToolBar>
+      <TableView prefHeight="234.0" prefWidth="600.0">
+        <columns>
+          <TableColumn prefWidth="69.8039573431015" text="Cod" />
+          <TableColumn prefWidth="103.11690521240234" text="Nome" />
+            <TableColumn prefWidth="75.0" text="Tamanho" />
+            <TableColumn prefWidth="97.6402587890625" text="Categoria" />
+            <TableColumn prefWidth="116.35971069335938" text="Valor de Compra" />
+            <TableColumn prefWidth="110.33633422851562" text="Valor de Venda" />
+            <TableColumn prefWidth="110.33633422851562" text="Data de Postagem" />
+            <TableColumn prefWidth="110.33633422851562" text="Data de Compra" />
+            <TableColumn prefWidth="110.33633422851562" text="Data de Venda" />
+            <TableColumn prefWidth="84.10992431640625" text="Status" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>

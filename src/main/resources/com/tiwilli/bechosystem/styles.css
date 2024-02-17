@@ -1,0 +1,11 @@
+.menu {
+    -fx-font-size: 16px;
+}
+
+.menu-bar .menu {
+    -fx-padding: 5px 20px;
+}
+
+.table-view {
+    -fx-font-size: 17px;
+}
