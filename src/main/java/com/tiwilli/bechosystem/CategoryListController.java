@@ -1,5 +1,6 @@
 package com.tiwilli.bechosystem;
 
+import com.tiwilli.bechosystem.gui.listeners.DataChangeListener;
 import com.tiwilli.bechosystem.gui.util.Alerts;
 import com.tiwilli.bechosystem.gui.util.Utils;
 import com.tiwilli.bechosystem.model.entities.Category;
@@ -25,7 +26,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CategoryListController implements Initializable {
+public class CategoryListController implements Initializable, DataChangeListener {
 
     private CategoryService service;
 
@@ -33,7 +34,7 @@ public class CategoryListController implements Initializable {
     private TableView<Category> categoryTableView;
 
     @FXML
-    private TableColumn<Category, Long> tableColumnId;
+    private TableColumn<Category, Integer> tableColumnId;
 
     @FXML
     private TableColumn<Category, String> tableColumnName;
@@ -43,6 +44,10 @@ public class CategoryListController implements Initializable {
 
     private ObservableList<Category> observableList;
 
+    public void setCategoryService(CategoryService service) {
+        this.service = service;
+    }
+
     @FXML
     public void onBtRegister(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
@@ -50,9 +55,6 @@ public class CategoryListController implements Initializable {
         createDialogForm(obj, "CategoryForm.fxml", parentStage);
     }
 
-    public void setCategoryService(CategoryService service) {
-        this.service = service;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -84,6 +86,8 @@ public class CategoryListController implements Initializable {
                 CategoryFormController controller = loader.getController();
                 controller.setCategory(obj);
                 controller.setCategoryService(new CategoryService());
+                controller.subscribeDataChangeListener(this);
+                controller.updateFormData();
 
                 Stage dialogStage = new Stage();
                 dialogStage.setTitle("Entre com os dados da categoria");
@@ -99,4 +103,8 @@ public class CategoryListController implements Initializable {
             }
     }
 
+    @Override
+    public void onDataChanged() {
+        updateTableView();
+    }
 }
