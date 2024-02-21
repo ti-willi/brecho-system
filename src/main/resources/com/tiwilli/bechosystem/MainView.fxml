@@ -11,14 +11,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<?import java.net.URL?>
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tiwilli.bechosystem.MainViewController">
+<ScrollPane prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tiwilli.bechosystem.MainViewController">
    <content>
       <VBox>
          <children>
             <HBox alignment="CENTER">
                <children>
-                  <MenuBar HBox.hgrow="ALWAYS" stylesheets="@styles.css">
+                  <MenuBar stylesheets="@styles.css" HBox.hgrow="ALWAYS">
                     <menus>
                       <Menu mnemonicParsing="false">
                         <items>
@@ -51,7 +50,7 @@
                     <menus>
                       <Menu mnemonicParsing="false" text="Roupas">
                            <items>
-                              <MenuItem fx:id="menuItemClothes" mnemonicParsing="false" text="Abrir"/>
+                              <MenuItem fx:id="menuItemClothes" mnemonicParsing="false" text="Abrir" />
                            </items>
                         </Menu>
                       <Menu mnemonicParsing="false" text="Categorias">
@@ -88,7 +87,7 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </MenuBar>
-                  <MenuBar HBox.hgrow="ALWAYS" stylesheets="@styles.css">
+                  <MenuBar stylesheets="@styles.css" HBox.hgrow="ALWAYS">
                     <menus>
                       <Menu mnemonicParsing="false">
                         <items>

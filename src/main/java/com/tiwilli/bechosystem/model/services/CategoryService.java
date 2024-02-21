@@ -15,6 +15,10 @@ public class CategoryService {
         return dao.findAll();
     }
 
+    public Category findById(Integer id) {
+        return dao.findById(id);
+    }
+
     public void saveOrUpdate(Category obj) {
         if (obj.getId() == null) {
             dao.insert(obj);

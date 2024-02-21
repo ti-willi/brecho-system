@@ -1,5 +1,6 @@
 package com.tiwilli.bechosystem;
 
+import com.tiwilli.bechosystem.db.DbIntegrityException;
 import com.tiwilli.bechosystem.gui.listeners.DataChangeListener;
 import com.tiwilli.bechosystem.gui.util.Alerts;
 import com.tiwilli.bechosystem.gui.util.Utils;
@@ -12,10 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
@@ -24,6 +22,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class CategoryListController implements Initializable, DataChangeListener {
@@ -34,13 +33,22 @@ public class CategoryListController implements Initializable, DataChangeListener
     private TableView<Category> categoryTableView;
 
     @FXML
-    private TableColumn<Category, Integer> tableColumnId;
-
-    @FXML
     private TableColumn<Category, String> tableColumnName;
 
     @FXML
+    private Label labelId;
+
+    @FXML
+    private Label labelName;
+
+    @FXML
     private Button btRegister;
+
+    @FXML
+    private Button btEdit;
+
+    @FXML
+    private Button btDelete;
 
     private ObservableList<Category> observableList;
 
@@ -49,12 +57,44 @@ public class CategoryListController implements Initializable, DataChangeListener
     }
 
     @FXML
-    public void onBtRegister(ActionEvent event) {
+    public void onBtRegisterAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
         Category obj = new Category();
         createDialogForm(obj, "CategoryForm.fxml", parentStage);
     }
 
+    @FXML
+    public void onBtEditAction(ActionEvent event) {
+        Category obj = categoryTableView.getSelectionModel().getSelectedItem();
+        if (obj != null) {
+            Stage parentStage = Utils.currentStage(event);
+            obj = service.findById(obj.getId());
+            createDialogForm(obj, "CategoryForm.fxml", parentStage);
+            categoryTableView.refresh();
+        }
+        else {
+            Alerts.showAlert("Nenhuma categoria selecionada", null, "Selecione uma categoria para editar", Alert.AlertType.WARNING);
+        }
+    }
+
+    @FXML
+    public void onBtDeleteAction() {
+        Category obj = categoryTableView.getSelectionModel().getSelectedItem();
+        Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Tem certeza que deseja excluir?");
+
+        if (result.get() == ButtonType.OK) {
+            if (service == null) {
+                throw new IllegalStateException("Service was null");
+            }
+            try {
+                service.remove(obj);
+                updateTableView();
+            }
+            catch (DbIntegrityException e) {
+                Alerts.showAlert("Erro!", null, "Você não pode remover uma categoria associada a um produto", Alert.AlertType.ERROR);
+            }
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -62,11 +102,26 @@ public class CategoryListController implements Initializable, DataChangeListener
     }
 
     private void initializeNodes() {
-        tableColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
         tableColumnName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
         Stage stage = (Stage) Main.getMainScene().getWindow();
         categoryTableView.prefHeightProperty().bind(stage.heightProperty());
+
+        categoryTableView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    selectItemCategoryTableView(newValue);
+                }
+        );
+    }
+
+    private void selectItemCategoryTableView(Category obj) {
+        if (obj != null) {
+            labelId.setText(String.valueOf(obj.getId()));
+            labelName.setText(obj.getName());
+        }
+        else {
+            return;
+        }
     }
 
     public void updateTableView() {

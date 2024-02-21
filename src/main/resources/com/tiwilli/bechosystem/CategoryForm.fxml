@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="214.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tiwilli.bechosystem.CategoryFormController">
+<AnchorPane prefHeight="162.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tiwilli.bechosystem.CategoryFormController">
    <children>
       <GridPane layoutX="62.0" layoutY="43.0" prefHeight="91.0" prefWidth="451.0">
         <columnConstraints>
@@ -20,17 +20,18 @@
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="130.0" />
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="32.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="33.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="144.0" text="Nome">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="144.0" text="Nome" GridPane.rowIndex="1">
                <font>
-                  <Font size="16.0" />
+                  <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <TextField fx:id="txtName" prefHeight="26.0" prefWidth="167.0" GridPane.columnIndex="1" />
-            <Label fx:id="labelErrorName" textFill="RED" GridPane.columnIndex="2">
+            <TextField fx:id="txtName" prefHeight="26.0" prefWidth="167.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="labelErrorName" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <padding>
                   <Insets left="10.0" />
                </padding>
@@ -38,7 +39,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <HBox alignment="TOP_CENTER" prefHeight="32.0" prefWidth="153.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <HBox alignment="TOP_CENTER" prefHeight="32.0" prefWidth="153.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <children>
                   <Button fx:id="btSave" mnemonicParsing="false" onAction="#onBtSaveAction" text="Salvar">
                      <font>
@@ -55,6 +56,16 @@
                   <Insets top="5.0" />
                </padding>
             </HBox>
+            <Label fx:id="labelId" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="144.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="labelIdValue" prefHeight="36.0" prefWidth="144.0" GridPane.columnIndex="1">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
          </children>
       </GridPane>
    </children>

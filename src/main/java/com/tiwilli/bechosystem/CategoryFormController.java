@@ -11,10 +11,7 @@ import com.tiwilli.bechosystem.model.services.CategoryService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.*;
@@ -28,13 +25,16 @@ public class CategoryFormController implements Initializable {
     private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
     @FXML
-    private TextField txtId;
-
-    @FXML
     private TextField txtName;
 
     @FXML
     private Label labelErrorName;
+
+    @FXML
+    private Label labelId;
+
+    @FXML
+    private Label labelIdValue;
 
     @FXML
     private Button btSave;
@@ -73,8 +73,7 @@ public class CategoryFormController implements Initializable {
         }
         catch (DbException e) {
             e.printStackTrace();
-            Alerts.showAlert("Error saving object", null, e.getMessage(), Alert.AlertType.ERROR);
-
+            Alerts.showAlert("Erro!", null, "Erro ao salvar o objeto", Alert.AlertType.ERROR);
         }
     }
 
@@ -89,9 +88,12 @@ public class CategoryFormController implements Initializable {
 
         ValidationException exception = new ValidationException("Validation error");
 
+        obj.setId(Utils.tryParseToInt(labelIdValue.getText()));
+
         if (txtName.getText() == null || txtName.getText().trim().isEmpty()) {
             exception.addError("name", "Campo requerido");
         }
+
         obj.setName(txtName.getText());
 
         if (!exception.getErrors().isEmpty()) {
@@ -120,6 +122,10 @@ public class CategoryFormController implements Initializable {
             throw new IllegalStateException("Entity was null");
         }
 
+        if (entity.getId() != null) {
+            labelId.setText("Id");
+            labelIdValue.setText(String.valueOf(entity.getId()));
+        }
         txtName.setText(entity.getName());
     }
 

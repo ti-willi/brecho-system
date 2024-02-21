@@ -21,6 +21,7 @@ public class Main extends Application {
         scrollPane.setFitToWidth(true);
 
         mainScene = new Scene(scrollPane);
+        //stage.setMaximized(true);
         stage.setScene(mainScene);
         stage.setTitle("Brecho System");
         stage.show();
