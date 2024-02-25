@@ -1,7 +1,7 @@
-package com.tiwilli.bechosystem.dao;
+package com.tiwilli.bechosystem.model.dao;
 
-import com.tiwilli.bechosystem.dao.impl.CategoryDaoJDBC;
-import com.tiwilli.bechosystem.dao.impl.ClothesDaoJDBC;
+import com.tiwilli.bechosystem.model.dao.impl.CategoryDaoJDBC;
+import com.tiwilli.bechosystem.model.dao.impl.ClothesDaoJDBC;
 import com.tiwilli.bechosystem.db.DB;
 
 public class DaoFactory {

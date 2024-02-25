@@ -5,14 +5,18 @@ import javafx.scene.Node;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
+import java.sql.*;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class Utils {
 
@@ -54,6 +58,11 @@ public class Utils {
             };
             return cell;
         });
+    }
+
+    public static String formatLabelDate(Date date, String format) {
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return date != null ? sdf.format(date) : "";
     }
 
     public static <T> void formatTableColumnDouble(TableColumn<T, Double> tableColumn, int decimalPlaces) {
@@ -98,5 +107,23 @@ public class Utils {
                 }
             }
         });
+    }
+
+    public static void trySetPreparedStatementToDouble(PreparedStatement st, int index, Double value) throws SQLException {
+        st.setDouble(index, Objects.requireNonNullElse(value, 0.0));
+    }
+
+    public static void trySetPreparedStatementToDate(PreparedStatement st, int index, Date date) throws SQLException {
+        if (date == null) {
+            st.setNull(index, Types.DATE);
+        }
+        else {
+            st.setDate(index, new java.sql.Date(date.getTime()));
+        }
+    }
+
+    public static Date getDateOrNull(ResultSet rs, String columnLabel) throws SQLException {
+        Timestamp timestamp = rs.getTimestamp(columnLabel);
+        return (timestamp != null) ? new java.util.Date(timestamp.getTime()) : null;
     }
 }

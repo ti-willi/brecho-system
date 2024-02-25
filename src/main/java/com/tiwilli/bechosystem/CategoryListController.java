@@ -68,7 +68,6 @@ public class CategoryListController implements Initializable, DataChangeListener
         Category obj = categoryTableView.getSelectionModel().getSelectedItem();
         if (obj != null) {
             Stage parentStage = Utils.currentStage(event);
-            obj = service.findById(obj.getId());
             createDialogForm(obj, "CategoryForm.fxml", parentStage);
             categoryTableView.refresh();
         }
@@ -80,20 +79,29 @@ public class CategoryListController implements Initializable, DataChangeListener
     @FXML
     public void onBtDeleteAction() {
         Category obj = categoryTableView.getSelectionModel().getSelectedItem();
-        Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Tem certeza que deseja excluir?");
 
-        if (result.get() == ButtonType.OK) {
-            if (service == null) {
-                throw new IllegalStateException("Service was null");
-            }
-            try {
-                service.remove(obj);
-                updateTableView();
-            }
-            catch (DbIntegrityException e) {
-                Alerts.showAlert("Erro!", null, "Você não pode remover uma categoria associada a um produto", Alert.AlertType.ERROR);
+        if (obj != null) {
+            Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Tem certeza que deseja excluir?");
+
+            if (result.get() == ButtonType.OK) {
+                if (service == null) {
+                    throw new IllegalStateException("Service was null");
+                }
+                try {
+                    service.remove(obj);
+                    updateTableView();
+                    clearItemsCategoryTableView();
+                }
+                catch (DbIntegrityException e) {
+                    Alerts.showAlert("Erro!", null, "Você não pode remover uma categoria associada a um produto", Alert.AlertType.ERROR);
+                }
             }
         }
+        else {
+            Alerts.showAlert("Nenhuma categoria selecionada", null, "Selecione uma categoria para excluir", Alert.AlertType.WARNING);
+
+        }
+
     }
 
     @Override
@@ -109,12 +117,12 @@ public class CategoryListController implements Initializable, DataChangeListener
 
         categoryTableView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    selectItemCategoryTableView(newValue);
+                    selectItemsCategoryTableView(newValue);
                 }
         );
     }
 
-    private void selectItemCategoryTableView(Category obj) {
+    private void selectItemsCategoryTableView(Category obj) {
         if (obj != null) {
             labelId.setText(String.valueOf(obj.getId()));
             labelName.setText(obj.getName());
@@ -122,6 +130,11 @@ public class CategoryListController implements Initializable, DataChangeListener
         else {
             return;
         }
+    }
+
+    private void clearItemsCategoryTableView() {
+        labelId.setText("");
+        labelName.setText("");
     }
 
     public void updateTableView() {

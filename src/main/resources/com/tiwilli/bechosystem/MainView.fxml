@@ -50,7 +50,7 @@
                     <menus>
                       <Menu mnemonicParsing="false" text="Roupas">
                            <items>
-                              <MenuItem fx:id="menuItemClothes" mnemonicParsing="false" text="Abrir" />
+                              <MenuItem fx:id="menuItemClothes" mnemonicParsing="false" onAction="#onMenuItemClothesAction" text="Abrir" />
                            </items>
                         </Menu>
                       <Menu mnemonicParsing="false" text="Categorias">

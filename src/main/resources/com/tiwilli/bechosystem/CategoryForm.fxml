@@ -25,9 +25,9 @@
             <RowConstraints maxHeight="33.0" minHeight="10.0" prefHeight="33.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="144.0" text="Nome" GridPane.rowIndex="1">
+            <Label contentDisplay="CENTER" prefHeight="36.0" prefWidth="144.0" text="Nome" GridPane.rowIndex="1">
                <font>
-                  <Font name="System Bold" size="16.0" />
+                  <Font name="Arial Bold" size="16.0" />
                </font>
             </Label>
             <TextField fx:id="txtName" prefHeight="26.0" prefWidth="167.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -56,12 +56,12 @@
                   <Insets top="5.0" />
                </padding>
             </HBox>
-            <Label fx:id="labelId" alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="144.0">
+            <Label fx:id="labelId" contentDisplay="CENTER" prefHeight="36.0" prefWidth="144.0">
                <font>
-                  <Font size="16.0" />
+                  <Font name="Arial Bold" size="16.0" />
                </font>
             </Label>
-            <Label fx:id="labelIdValue" prefHeight="36.0" prefWidth="144.0" GridPane.columnIndex="1">
+            <Label fx:id="labelIdValue" contentDisplay="CENTER" prefHeight="36.0" prefWidth="144.0" GridPane.columnIndex="1">
                <font>
                   <Font size="16.0" />
                </font>

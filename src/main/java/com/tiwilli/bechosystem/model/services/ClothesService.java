@@ -1,25 +1,25 @@
 package com.tiwilli.bechosystem.model.services;
 
-import com.tiwilli.bechosystem.dao.CategoryDao;
-import com.tiwilli.bechosystem.dao.DaoFactory;
+import com.tiwilli.bechosystem.model.dao.ClothesDao;
+import com.tiwilli.bechosystem.model.dao.DaoFactory;
 import com.tiwilli.bechosystem.model.entities.Category;
+import com.tiwilli.bechosystem.model.entities.Clothes;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryService {
+public class ClothesService {
 
-    private CategoryDao dao = DaoFactory.createCategoryDao();
+    private ClothesDao dao = DaoFactory.createClothesDao();
 
-    public List<Category> findAll() {
+    public List<Clothes> findAll() {
         return dao.findAll();
     }
 
-    public Category findById(Integer id) {
+    public Clothes findById(Integer id) {
         return dao.findById(id);
     }
 
-    public void saveOrUpdate(Category obj) {
+    public void saveOrUpdate(Clothes obj) {
         if (obj.getId() == null) {
             dao.insert(obj);
         }
@@ -28,7 +28,11 @@ public class CategoryService {
         }
     }
 
-    public void remove(Category obj) {
+    public void remove(Clothes obj) {
         dao.deleteById(obj.getId());
+    }
+
+    public List<Clothes> findByCategory(Category category) {
+        return dao.findByCategory(category);
     }
 }

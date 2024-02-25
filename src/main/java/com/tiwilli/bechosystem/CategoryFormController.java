@@ -123,7 +123,7 @@ public class CategoryFormController implements Initializable {
         }
 
         if (entity.getId() != null) {
-            labelId.setText("Id");
+            labelId.setText("Código");
             labelIdValue.setText(String.valueOf(entity.getId()));
         }
         txtName.setText(entity.getName());

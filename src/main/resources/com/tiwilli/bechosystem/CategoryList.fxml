@@ -31,7 +31,7 @@
                <children>
                   <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="154.0" layoutY="24.0" text="Detalhes da Categoria" AnchorPane.leftAnchor="154.0" AnchorPane.rightAnchor="154.0">
                      <font>
-                        <Font name="System Bold" size="18.0" />
+                        <Font name="Arial Bold" size="18.0" />
                      </font>
                   </Label>
                   <GridPane alignment="CENTER" layoutX="114.0" layoutY="136.0" prefHeight="67.0" prefWidth="248.0">
@@ -44,24 +44,24 @@
                       <RowConstraints maxHeight="33.75994110107422" minHeight="10.0" prefHeight="32.879974365234375" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Codigo">
+                        <Label text="Código">
                            <font>
-                              <Font name="System Bold" size="18.0" />
+                              <Font name="Arial Bold" size="20.0" />
                            </font>
                         </Label>
                         <Label text="Nome" GridPane.rowIndex="1">
                            <font>
-                              <Font name="System Bold" size="18.0" />
+                              <Font name="Arial Bold" size="20.0" />
                            </font>
                         </Label>
                         <Label fx:id="labelId" GridPane.columnIndex="1">
                            <font>
-                              <Font size="18.0" />
+                              <Font size="20.0" />
                            </font>
                         </Label>
                         <Label fx:id="labelName" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
-                              <Font size="18.0" />
+                              <Font size="20.0" />
                            </font>
                         </Label>
                      </children>

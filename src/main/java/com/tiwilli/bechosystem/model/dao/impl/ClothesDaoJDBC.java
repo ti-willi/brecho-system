@@ -1,6 +1,6 @@
-package com.tiwilli.bechosystem.dao.impl;
+package com.tiwilli.bechosystem.model.dao.impl;
 
-import com.tiwilli.bechosystem.dao.ClothesDao;
+import com.tiwilli.bechosystem.model.dao.ClothesDao;
 import com.tiwilli.bechosystem.db.DB;
 import com.tiwilli.bechosystem.db.DbException;
 import com.tiwilli.bechosystem.db.DbIntegrityException;
@@ -39,9 +39,9 @@ public class ClothesDaoJDBC implements ClothesDao {
             st.setString(2, obj.getSize());
             Utils.trySetPreparedStatementToDouble(st, 3, obj.getPurchaseValue());
             Utils.trySetPreparedStatementToDouble(st, 4, obj.getSalesValue());
-            Utils.trySetPreparedStatementToDate(st, 5, obj.getPurchaseDate().getTime());
-            Utils.trySetPreparedStatementToDate(st, 6, obj.getSalesDate().getTime());
-            Utils.trySetPreparedStatementToDate(st, 7, obj.getPostDate().getTime());
+            Utils.trySetPreparedStatementToDate(st, 5, obj.getPurchaseDate());
+            Utils.trySetPreparedStatementToDate(st, 6, obj.getSalesDate());
+            Utils.trySetPreparedStatementToDate(st, 7, obj.getPostDate());
             st.setInt(8, obj.getStatus().getCode());
             st.setInt(9, obj.getCategory().getId());
 
@@ -83,9 +83,9 @@ public class ClothesDaoJDBC implements ClothesDao {
             st.setString(2, obj.getSize());
             Utils.trySetPreparedStatementToDouble(st, 3, obj.getPurchaseValue());
             Utils.trySetPreparedStatementToDouble(st, 4, obj.getSalesValue());
-            Utils.trySetPreparedStatementToDate(st, 5, obj.getPurchaseDate().getTime());
-            Utils.trySetPreparedStatementToDate(st, 6, obj.getSalesDate().getTime());
-            Utils.trySetPreparedStatementToDate(st, 7, obj.getPostDate().getTime());
+            Utils.trySetPreparedStatementToDate(st, 5, obj.getPurchaseDate());
+            Utils.trySetPreparedStatementToDate(st, 6, obj.getSalesDate());
+            Utils.trySetPreparedStatementToDate(st, 7, obj.getPostDate());
             st.setInt(8, obj.getStatus().getCode());
             st.setInt(9, obj.getCategory().getId());
             st.setInt(10, obj.getId());
@@ -160,10 +160,9 @@ public class ClothesDaoJDBC implements ClothesDao {
         obj.setSize(rs.getString("size"));
         obj.setPurchaseValue(rs.getDouble("purchase_value"));
         obj.setSalesValue(rs.getDouble("sales_value"));
-        obj.setPurchaseDate(rs.getDate("purchase_date"));
-        Utils.getDateOrNull(rs, "sales_date");
-        Utils.getDateOrNull(rs, "purchase_date");
-        Utils.getDateOrNull(rs, "post_date");
+        obj.setPurchaseDate(Utils.getDateOrNull(rs, "purchase_date"));
+        obj.setSalesDate(Utils.getDateOrNull(rs, "sales_date"));
+        obj.setPostDate(Utils.getDateOrNull(rs, "post_date"));
         obj.setStatus(ClothesStatus.valueOf(rs.getInt("status")));
         obj.setCategory(cat);
         return obj;

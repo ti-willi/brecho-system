@@ -1,10 +1,9 @@
 package com.tiwilli.bechosystem.model.services;
 
-import com.tiwilli.bechosystem.dao.CategoryDao;
-import com.tiwilli.bechosystem.dao.DaoFactory;
+import com.tiwilli.bechosystem.model.dao.CategoryDao;
+import com.tiwilli.bechosystem.model.dao.DaoFactory;
 import com.tiwilli.bechosystem.model.entities.Category;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CategoryService {

@@ -1,4 +1,4 @@
-package com.tiwilli.bechosystem.dao;
+package com.tiwilli.bechosystem.model.dao;
 
 import com.tiwilli.bechosystem.model.entities.Category;
 import com.tiwilli.bechosystem.model.entities.Clothes;

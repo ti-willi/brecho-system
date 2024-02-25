@@ -1,6 +1,6 @@
-package com.tiwilli.bechosystem.dao.impl;
+package com.tiwilli.bechosystem.model.dao.impl;
 
-import com.tiwilli.bechosystem.dao.CategoryDao;
+import com.tiwilli.bechosystem.model.dao.CategoryDao;
 import com.tiwilli.bechosystem.db.DB;
 import com.tiwilli.bechosystem.db.DbException;
 import com.tiwilli.bechosystem.db.DbIntegrityException;
