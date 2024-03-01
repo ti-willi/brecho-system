@@ -1,8 +1,13 @@
 package com.tiwilli.bechosystem;
 
 import com.tiwilli.bechosystem.model.entities.Category;
+import com.tiwilli.bechosystem.model.entities.Client;
+import com.tiwilli.bechosystem.model.entities.ClientAddress;
 import com.tiwilli.bechosystem.model.entities.Clothes;
 import com.tiwilli.bechosystem.model.entities.enums.ClothesStatus;
+import com.tiwilli.bechosystem.model.services.CategoryService;
+import com.tiwilli.bechosystem.model.services.ClientAddressService;
+import com.tiwilli.bechosystem.model.services.ClientService;
 import com.tiwilli.bechosystem.model.services.ClothesService;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -41,9 +46,21 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch();
 
-        /*Category cat = new Category(1, "baba");
+        /*Category cat = new Category(null, "baba");
+        CategoryService categoryService = new CategoryService();
+        categoryService.saveOrUpdate(cat);
+
         Clothes clothes = new Clothes(null, "bota", "p", 20.0, 30.0, null, null, null, ClothesStatus.POSTED, cat);
         ClothesService service = new ClothesService();
         service.saveOrUpdate(clothes);*/
+
+        /*ClientAddress address = new ClientAddress(null, "Rio Grande do Sul", "Porto Alegre", "Auxiliadora", "Rua Eudoro Berlink", "Apto 405", 495, "90450-030");
+        ClientAddressService addressService = new ClientAddressService();
+        addressService.saveOrUpdate(address);
+
+        Client client = new Client(null, "Maria", "999997777", "maria@gmail.com", address);
+        ClientService clientService = new ClientService();
+        clientService.saveOrUpdate(client);*/
+
     }
 }

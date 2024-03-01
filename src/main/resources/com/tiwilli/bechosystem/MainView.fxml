@@ -60,7 +60,7 @@
                         </Menu>
                       <Menu mnemonicParsing="false" text="Clientes">
                            <items>
-                              <MenuItem fx:id="menuItemClient" mnemonicParsing="false" text="Abrir" />
+                              <MenuItem fx:id="menuItemClient" mnemonicParsing="false" onAction="#onMenuItemClientAction" text="Abrir" />
                            </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Vendas">

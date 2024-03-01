@@ -205,8 +205,6 @@ public class ClothesFormController implements Initializable {
     }
 
     private void initializeNodes() {
-        Constraints.setTextFieldDouble(txtPurchaseValue);
-        Constraints.setTextFieldDouble(txtSalesValue);
         Constraints.setTextFieldMaxLength(txtSize, 5);
         Constraints.setTextFieldMaxLength(txtName, 30);
         Utils.formatDatePicker(datePickerPost, "dd/MM/yyyy");

@@ -1,10 +1,10 @@
 package com.tiwilli.bechosystem.model.dao.impl;
 
-import com.tiwilli.bechosystem.model.dao.ClothesDao;
 import com.tiwilli.bechosystem.db.DB;
 import com.tiwilli.bechosystem.db.DbException;
 import com.tiwilli.bechosystem.db.DbIntegrityException;
 import com.tiwilli.bechosystem.gui.util.Utils;
+import com.tiwilli.bechosystem.model.dao.ClothesDao;
 import com.tiwilli.bechosystem.model.entities.Category;
 import com.tiwilli.bechosystem.model.entities.Clothes;
 import com.tiwilli.bechosystem.model.entities.enums.ClothesStatus;
@@ -257,5 +257,4 @@ public class ClothesDaoJDBC implements ClothesDao {
             DB.closeResultSet(rs);
         }
     }
-
 }
