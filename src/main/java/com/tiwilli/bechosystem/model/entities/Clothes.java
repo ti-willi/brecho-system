@@ -19,10 +19,12 @@ public class Clothes {
 
     private Category category;
 
+    private Sales sales;
+
     public Clothes() {
     }
 
-    public Clothes(Integer id, String name, String size, Double purchaseValue, Double salesValue, Date purchaseDate, Date salesDate, Date postDate, ClothesStatus status, Category category) {
+    public Clothes(Integer id, String name, String size, Double purchaseValue, Double salesValue, Date purchaseDate, Date salesDate, Date postDate, ClothesStatus status, Category category, Sales sales) {
         this.id = id;
         this.name = name;
         this.size = size;
@@ -33,6 +35,7 @@ public class Clothes {
         this.postDate = postDate;
         setStatus(status);
         this.category = category;
+        this.sales = sales;
     }
 
     public Integer getId() {
@@ -117,6 +120,14 @@ public class Clothes {
         this.category = category;
     }
 
+    public Sales getSales() {
+        return sales;
+    }
+
+    public void setSales(Sales sales) {
+        this.sales = sales;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -143,8 +154,9 @@ public class Clothes {
                 ", purchaseDate=" + purchaseDate +
                 ", salesDate=" + salesDate +
                 ", postDate=" + postDate +
-                ", status=" + getStatus() +
+                ", status=" + status +
                 ", category=" + category +
+                ", sales=" + sales +
                 '}';
     }
 }

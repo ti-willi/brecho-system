@@ -1,9 +1,7 @@
-package com.tiwilli.bechosystem.model.dao;
+package com.tiwilli.bechosystem.model.dao.factories;
 
-import com.tiwilli.bechosystem.model.dao.impl.CategoryDaoJDBC;
-import com.tiwilli.bechosystem.model.dao.impl.ClientAddressDaoJDBC;
-import com.tiwilli.bechosystem.model.dao.impl.ClientDaoJDBC;
-import com.tiwilli.bechosystem.model.dao.impl.ClothesDaoJDBC;
+import com.tiwilli.bechosystem.model.dao.*;
+import com.tiwilli.bechosystem.model.dao.impl.*;
 import com.tiwilli.bechosystem.db.DB;
 
 public class DaoFactory {
@@ -22,5 +20,9 @@ public class DaoFactory {
 
     public static ClientDao createClientDao() {
         return new ClientDaoJDBC(DB.getConnection());
+    }
+
+    public static SalesDao createSalesDao() {
+        return new SalesDaoJDBC(DB.getConnection());
     }
 }

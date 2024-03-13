@@ -224,7 +224,7 @@ public class ClientFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeNodes();
+        //initializeNodes();
     }
 
     private void initializeNodes() {

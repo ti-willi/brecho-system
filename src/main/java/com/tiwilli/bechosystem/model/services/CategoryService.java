@@ -1,8 +1,7 @@
 package com.tiwilli.bechosystem.model.services;
 
 import com.tiwilli.bechosystem.model.dao.CategoryDao;
-import com.tiwilli.bechosystem.model.dao.ClothesDao;
-import com.tiwilli.bechosystem.model.dao.DaoFactory;
+import com.tiwilli.bechosystem.model.dao.factories.DaoFactory;
 import com.tiwilli.bechosystem.model.entities.Category;
 
 import java.util.List;

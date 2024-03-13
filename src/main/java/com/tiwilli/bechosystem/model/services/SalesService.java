@@ -1,24 +1,24 @@
 package com.tiwilli.bechosystem.model.services;
 
-import com.tiwilli.bechosystem.model.dao.ClientDao;
+import com.tiwilli.bechosystem.model.dao.SalesDao;
 import com.tiwilli.bechosystem.model.dao.factories.DaoFactory;
-import com.tiwilli.bechosystem.model.entities.Client;
+import com.tiwilli.bechosystem.model.entities.Sales;
 
 import java.util.List;
 
-public class ClientService {
+public class SalesService {
 
-    private ClientDao dao = DaoFactory.createClientDao();
+    private SalesDao dao = DaoFactory.createSalesDao();
 
-    public List<Client> findAll() {
+    public List<Sales> findAll() {
         return dao.findAll();
     }
 
-    public Client findById(Integer id) {
+    public Sales findById(Integer id) {
         return dao.findById(id);
     }
 
-    public void saveOrUpdate(Client obj) {
+    public void saveOrUpdate(Sales obj) {
         if (obj.getId() == null) {
             dao.insert(obj);
         }
@@ -27,7 +27,7 @@ public class ClientService {
         }
     }
 
-    public void remove(Client obj) {
+    public void remove(Sales obj) {
         dao.deleteById(obj.getId());
     }
 

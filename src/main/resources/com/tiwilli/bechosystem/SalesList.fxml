@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tiwilli.bechosystem.SalesListController">
+   <children>
+      <SplitPane dividerPositions="0.5250455373406193" VBox.vgrow="ALWAYS">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="598.0" prefWidth="592.0">
+               <children>
+                  <TableView fx:id="salesTableView" layoutX="-23.0" layoutY="1.0" prefHeight="241.0" prefWidth="410.0" stylesheets="@styles.css" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
+                    <columns>
+                      <TableColumn fx:id="tableColumnClientName" prefWidth="112.42101168632507" text="Cliente" />
+                        <TableColumn fx:id="tableColumnQuantity" prefWidth="121.47314453125" text="Quantidade" />
+                        <TableColumn fx:id="tableColumnSalesDate" prefWidth="133.52685546875" text="Data da Venda" />
+                        <TableColumn fx:id="tableColumnTotalAmount" prefWidth="205.73159790039062" text="Valor Total" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0">
+               <children>
+                  <Label alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="154.0" layoutY="24.0" text="Detalhes da Venda" AnchorPane.bottomAnchor="351.0" AnchorPane.leftAnchor="154.0" AnchorPane.rightAnchor="154.0" AnchorPane.topAnchor="10.0">
+                     <font>
+                        <Font name="Arial Bold" size="20.0" />
+                     </font>
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
+                  </Label>
+                  <HBox alignment="BOTTOM_RIGHT" layoutY="302.0" prefHeight="398.0" prefWidth="475.0" spacing="10.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                      <Button fx:id="btRegister" alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#onBtRegisterAction" text="Inserir">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btEdit" alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#onBtEditAction" text="Editar">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="btDelete" alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#onBtDeleteAction" text="Excluir">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets left="20.0" />
+                     </padding>
+                  </HBox>
+                  <GridPane alignment="TOP_CENTER" layoutX="26.0" layoutY="129.0" minWidth="-Infinity" prefHeight="224.0" prefWidth="420.0" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="120.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="204.0" minWidth="10.0" prefWidth="163.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="165.35858154296875" minWidth="10.0" prefWidth="134.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="47.07952117919922" minHeight="10.0" prefHeight="32.120025634765625" />
+                      <RowConstraints maxHeight="33.75994110107422" minHeight="10.0" prefHeight="32.879974365234375" />
+                        <RowConstraints maxHeight="34.0" minHeight="5.0" prefHeight="33.0" />
+                        <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="31.0" />
+                        <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="31.0" />
+                        <RowConstraints maxHeight="59.0" minHeight="10.0" prefHeight="31.0" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Código">
+                           <font>
+                              <Font name="Arial Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label text="Cliente" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Arial Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label text="Produtos" GridPane.rowIndex="2">
+                           <font>
+                              <Font name="Arial Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label text="Data da Venda" GridPane.rowIndex="3">
+                           <font>
+                              <Font name="Arial Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label text="Valor Total" GridPane.rowIndex="4">
+                           <font>
+                              <Font name="Arial Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label text="Lucro" GridPane.rowIndex="5">
+                           <font>
+                              <Font name="Arial Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelId" GridPane.columnIndex="1">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelSalesDate" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelTotalAmount" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="labelProfit" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="btClient" mnemonicParsing="false" onAction="#obBtClientAction" text="Ver mais" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin></Button>
+                        <Button fx:id="btProduct" mnemonicParsing="false" onAction="#onBtProductAction" text="Ver mais" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</VBox>

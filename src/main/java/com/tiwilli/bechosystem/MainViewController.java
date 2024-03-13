@@ -1,10 +1,7 @@
 package com.tiwilli.bechosystem;
 
 import com.tiwilli.bechosystem.gui.util.Alerts;
-import com.tiwilli.bechosystem.model.services.CategoryService;
-import com.tiwilli.bechosystem.model.services.ClientAddressService;
-import com.tiwilli.bechosystem.model.services.ClientService;
-import com.tiwilli.bechosystem.model.services.ClothesService;
+import com.tiwilli.bechosystem.model.services.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -63,13 +60,16 @@ public class MainViewController implements Initializable {
         });
     }
 
-    /*
-    @FXML
-    public void onMenuItemSaleAction() {
-        loadView("SaleList.fxml");
-    }
 
     @FXML
+    public void onMenuItemSalesAction() {
+        loadView("SalesList.fxml", (SalesListController controller) -> {
+            controller.setSalesService(new SalesService());
+            controller.updateTableView();
+        });
+    }
+
+    /*@FXML
     public void onMenuItemShoppingBagAction() {
         loadView("ShoppingBagList.fxml");
     }

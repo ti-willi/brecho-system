@@ -1,7 +1,7 @@
 package com.tiwilli.bechosystem.model.services;
 
 import com.tiwilli.bechosystem.model.dao.ClientAddressDao;
-import com.tiwilli.bechosystem.model.dao.DaoFactory;
+import com.tiwilli.bechosystem.model.dao.factories.DaoFactory;
 import com.tiwilli.bechosystem.model.entities.ClientAddress;
 
 import java.util.List;

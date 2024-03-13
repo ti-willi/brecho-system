@@ -23,7 +23,7 @@
                   <TableView fx:id="clothesTableView" layoutX="-23.0" layoutY="1.0" prefHeight="241.0" prefWidth="959.0" stylesheets="@styles.css" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                     <columns>
                       <TableColumn fx:id="tableColumnName" prefWidth="122.0" text="Nome" />
-                        <TableColumn fx:id="tableColumnSize" prefWidth="114.0" text="Telefone" />
+                        <TableColumn fx:id="tableColumnSize" prefWidth="114.0" text="Tamanho" />
                         <TableColumn fx:id="tableColumnCategoryName" prefWidth="132.0" text="Categoria" />
                         <TableColumn fx:id="tableColumnStatus" prefWidth="175.0" text="Status" />
                     </columns>
