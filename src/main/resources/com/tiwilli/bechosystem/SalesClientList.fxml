@@ -23,18 +23,18 @@
                   </Label>
                </children>
             </HBox>
-            <TableView prefHeight="340.0" prefWidth="455.0">
+            <TableView fx:id="clientTableView" prefHeight="325.0" prefWidth="387.0" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn prefWidth="132.5" text="Codigo" />
-                <TableColumn prefWidth="321.5" text="Nome" />
+                <TableColumn fx:id="tableColumnId" prefWidth="143.5" text="Codigo" />
+                <TableColumn fx:id="tableColumnName" prefWidth="310.5" text="Nome" />
               </columns>
                <VBox.margin>
                   <Insets top="5.0" />
                </VBox.margin>
             </TableView>
-            <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="455.0">
+            <HBox alignment="CENTER_RIGHT" prefHeight="42.0" prefWidth="455.0">
                <children>
-                  <Button minHeight="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="44.0" text="OK">
+                  <Button fx:id="buttonOk" minHeight="10.0" mnemonicParsing="false" onAction="#onBtOkAction" prefHeight="25.0" prefWidth="44.0" text="OK">
                      <font>
                         <Font size="12.0" />
                      </font>

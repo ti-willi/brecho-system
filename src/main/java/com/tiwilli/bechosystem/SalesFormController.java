@@ -275,7 +275,7 @@ public class SalesFormController implements Initializable, DataChangeListener {
             controller.setClient(obj);
             controller.setClientService(new ClientService());
             controller.subscribeDataChangeListener(this);
-            //controller.updateFormData();
+            controller.updateTableView();
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Entre com os dados do salese");
@@ -300,7 +300,7 @@ public class SalesFormController implements Initializable, DataChangeListener {
             controller.setClothes(obj);
             controller.setClothesService(new ClothesService());
             controller.subscribeDataChangeListener(this);
-            //controller.updateFormData();
+            controller.updateTableView();
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Entre com os dados do salese");

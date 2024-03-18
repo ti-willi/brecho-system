@@ -9,14 +9,23 @@ import com.tiwilli.bechosystem.gui.util.Utils;
 import com.tiwilli.bechosystem.model.entities.Client;
 
 import com.tiwilli.bechosystem.model.entities.ClientAddress;
+import com.tiwilli.bechosystem.model.entities.Clothes;
+import com.tiwilli.bechosystem.model.services.CategoryService;
 import com.tiwilli.bechosystem.model.services.ClientAddressService;
 import com.tiwilli.bechosystem.model.services.ClientService;
 
+import com.tiwilli.bechosystem.model.services.ClothesService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
 
 import java.util.*;
@@ -270,7 +279,6 @@ public class ClientFormController implements Initializable {
         txtAddressComplement.setText(address.getAddressComplement());
         txtAddressNumber.setText(String.valueOf(address.getNumber()));
     }
-
 
     private void setErrorMessages(Map<String, String> errors) {
         Set<String> fields = errors.keySet();

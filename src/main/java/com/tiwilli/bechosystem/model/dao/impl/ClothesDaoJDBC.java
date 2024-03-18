@@ -31,8 +31,8 @@ public class ClothesDaoJDBC implements ClothesDao {
         try {
             st = conn.prepareStatement("""
                     INSERT INTO clothes
-                    (name, size, purchase_value, sales_value, purchase_date, sales_date, post_date, status, category_id, sales_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (name, size, purchase_value, sales_value, purchase_date, sales_date, post_date, status, category_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     Statement.RETURN_GENERATED_KEYS);
 
@@ -45,7 +45,6 @@ public class ClothesDaoJDBC implements ClothesDao {
             Utils.trySetPreparedStatementToDate(st, 7, obj.getPostDate());
             st.setInt(8, obj.getStatus().getCode());
             st.setInt(9, obj.getCategory().getId());
-            st.setInt(10, obj.getSales().getId());
 
             int rowsAffected = st.executeUpdate();
 
@@ -77,7 +76,7 @@ public class ClothesDaoJDBC implements ClothesDao {
             st = conn.prepareStatement("""
                             UPDATE clothes
                             SET name = ?, size = ?, purchase_value = ?, sales_value = ?, purchase_date = ?,
-                            sales_date = ?, post_date = ?, status = ?, category_id = ?, sales_id = ?
+                            sales_date = ?, post_date = ?, status = ?, category_id = ?
                             WHERE id = ?
                             """);
 
@@ -90,7 +89,6 @@ public class ClothesDaoJDBC implements ClothesDao {
             Utils.trySetPreparedStatementToDate(st, 7, obj.getPostDate());
             st.setInt(8, obj.getStatus().getCode());
             st.setInt(9, obj.getCategory().getId());
-            st.setInt(10, obj.getSales().getId());
             st.setInt(11, obj.getId());
 
             st.executeUpdate();
@@ -134,7 +132,6 @@ public class ClothesDaoJDBC implements ClothesDao {
                             SELECT clothes.*, category.name as cat_name
                             FROM clothes
                             INNER JOIN category ON clothes.category_id = category.id
-                            INNER JOIN sales ON clothes.sales_id = sales.id
                             WHERE clothes.id = ?
                             """
                     );
@@ -144,8 +141,7 @@ public class ClothesDaoJDBC implements ClothesDao {
 
             if (rs.next()) {
                 Category cat = instantiateCategory(rs);
-                Sales sales = instantiateSales(rs);
-                return instantiateClothes(rs, cat, sales);
+                return instantiateClothes(rs, cat);
             }
             return null;
         }
@@ -158,7 +154,7 @@ public class ClothesDaoJDBC implements ClothesDao {
         }
     }
 
-    private Clothes instantiateClothes(ResultSet rs, Category cat, Sales sales) throws SQLException {
+    private Clothes instantiateClothes(ResultSet rs, Category cat) throws SQLException {
         Clothes obj = new Clothes();
         obj.setId(rs.getInt("id"));
         obj.setName(rs.getString("name"));
@@ -170,7 +166,6 @@ public class ClothesDaoJDBC implements ClothesDao {
         obj.setPostDate(Utils.getDateOrNull(rs, "post_date"));
         obj.setStatus(ClothesStatus.valueOf(rs.getInt("status")));
         obj.setCategory(cat);
-        obj.setSales(sales);
         return obj;
     }
 
@@ -179,12 +174,6 @@ public class ClothesDaoJDBC implements ClothesDao {
         cat.setId(rs.getInt("category_id"));
         cat.setName(rs.getString("cat_name"));
         return cat;
-    }
-
-    private Sales instantiateSales(ResultSet rs) throws SQLException {
-        Sales sales = new Sales();
-        sales.setId(rs.getInt("sales_id"));
-        return sales;
     }
 
     @Override
@@ -197,7 +186,6 @@ public class ClothesDaoJDBC implements ClothesDao {
                             SELECT clothes.*, category.name as cat_name
                             FROM clothes
                             INNER JOIN category ON clothes.category_id = category.id
-                            INNER JOIN sales ON clothes.sales_id = sales.id
                             ORDER BY UPPER(clothes.name)
                             """);
 
@@ -214,9 +202,8 @@ public class ClothesDaoJDBC implements ClothesDao {
                     map.put(rs.getInt("category_id"), cat);
                 }
 
-                Sales sales = instantiateSales(rs);
 
-                Clothes obj = instantiateClothes(rs, cat, sales);
+                Clothes obj = instantiateClothes(rs, cat);
                 list.add(obj);
             }
             return list;
@@ -240,7 +227,6 @@ public class ClothesDaoJDBC implements ClothesDao {
                     SELECT clothes.*, category.name as cat_name
                     FROM clothes
                     INNER JOIN category ON clothes.category_id = category.id
-                    INNER JOIN sales ON clothes.sales_id = sales.id
                     WHERE category_id = ?
                     ORDER BY UPPER(clothes.name)
                     """);
@@ -258,9 +244,7 @@ public class ClothesDaoJDBC implements ClothesDao {
                     map.put(rs.getInt("category_id"), cat);
                 }
 
-                Sales sales = instantiateSales(rs);
-
-                Clothes obj = instantiateClothes(rs, cat, sales);
+                Clothes obj = instantiateClothes(rs, cat);
                 list.add(obj);
             }
             return list;
