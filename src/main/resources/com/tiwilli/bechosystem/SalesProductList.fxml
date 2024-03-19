@@ -35,7 +35,7 @@
             </TableView>
             <HBox alignment="CENTER_RIGHT" prefHeight="36.0" prefWidth="455.0">
                <children>
-                  <Button fx:id="btOk" minHeight="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="44.0" text="OK">
+                  <Button fx:id="btOk" minHeight="10.0" mnemonicParsing="false" onAction="#onBtOkAction" prefHeight="25.0" prefWidth="44.0" text="OK">
                      <font>
                         <Font size="12.0" />
                      </font>

@@ -1,9 +1,6 @@
 package com.tiwilli.bechosystem;
 
-import com.tiwilli.bechosystem.model.entities.Category;
-import com.tiwilli.bechosystem.model.entities.Client;
-import com.tiwilli.bechosystem.model.entities.ClientAddress;
-import com.tiwilli.bechosystem.model.entities.Clothes;
+import com.tiwilli.bechosystem.model.entities.*;
 import com.tiwilli.bechosystem.model.entities.enums.ClothesStatus;
 import com.tiwilli.bechosystem.model.services.CategoryService;
 import com.tiwilli.bechosystem.model.services.ClientAddressService;
@@ -19,6 +16,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 public class Main extends Application {
 

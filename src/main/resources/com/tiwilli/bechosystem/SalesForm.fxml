@@ -40,7 +40,7 @@
                               <Font name="Arial Bold" size="16.0" />
                            </font>
                         </Label>
-                        <TextField fx:id="txtName" prefHeight="26.0" prefWidth="167.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtClientName" editable="false" prefHeight="26.0" prefWidth="167.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Button fx:id="btFindClient" mnemonicParsing="false" onAction="#onBtFindClientAction" text="Procurar" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets left="5.0" />
@@ -72,7 +72,7 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <DatePicker GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <DatePicker editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                   <Label layoutX="187.0" layoutY="16.0" prefHeight="23.0" prefWidth="71.0" text="Venda" AnchorPane.leftAnchor="187.0" AnchorPane.rightAnchor="203.0" AnchorPane.topAnchor="16.0">
@@ -95,13 +95,13 @@
                         <Button mnemonicParsing="false" text="Remover" />
                     </items>
                   </ToolBar>
-                  <TableView layoutX="108.0" layoutY="97.0" prefHeight="239.0" prefWidth="547.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="97.0">
+                  <TableView fx:id="tableViewProducts" layoutX="108.0" layoutY="97.0" prefHeight="239.0" prefWidth="547.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="97.0">
                     <columns>
-                      <TableColumn prefWidth="110.0" text="Nome" />
-                      <TableColumn prefWidth="81.0" text="Tamanho" />
-                        <TableColumn prefWidth="107.0" text="Categoria" />
-                        <TableColumn prefWidth="120.0" text="Valor de Compra" />
-                        <TableColumn prefWidth="128.0" text="Valor de Venda" />
+                      <TableColumn fx:id="tableColumnProductName" prefWidth="110.0" text="Nome" />
+                      <TableColumn fx:id="tableColumnSize" prefWidth="81.0" text="Tamanho" />
+                        <TableColumn fx:id="tableColumnCategoryName" prefWidth="107.0" text="Categoria" />
+                        <TableColumn fx:id="tableColumnPurchaseValue" prefWidth="120.0" text="Valor de Compra" />
+                        <TableColumn fx:id="tableColumnSalesValue" prefWidth="128.0" text="Valor de Venda" />
                     </columns>
                   </TableView>
                   <VBox alignment="BOTTOM_CENTER" layoutY="437.0" prefHeight="52.0" prefWidth="547.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="437.0">

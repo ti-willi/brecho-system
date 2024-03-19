@@ -12,6 +12,7 @@ import com.tiwilli.bechosystem.model.entities.Sales;
 import com.tiwilli.bechosystem.model.services.ClientService;
 import com.tiwilli.bechosystem.model.services.ClothesService;
 import com.tiwilli.bechosystem.model.services.SalesService;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -208,36 +210,31 @@ public class SalesFormController implements Initializable, DataChangeListener {
     @FXML
     public void onBtFindClientAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
-        Client obj = new Client();
+        Sales obj = new Sales();
         createClientDialogForm(obj, "SalesClientList.fxml", parentStage);
     }
 
     @FXML
     public void onBtAddProductAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
-        Clothes obj = new Clothes();
+        Sales obj = new Sales();
         createProductDialogForm(obj, "SalesProductList.fxml", parentStage);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       // initializeNodes();
+       initializeNodes();
     }
 
-    /*private void initializeNodes() {
-        Constraints.setTextFieldMaxLength(txtName, 40);
-        Constraints.setTextFieldMaxLength(txtPhone, 20);
-        Constraints.setTextFieldMaxLength(txtEmail, 40);
-        Constraints.setTextFieldMaxLength(txtZipCode, 10);
-        Constraints.setTextFieldMaxLength(txtState, 40);
-        Constraints.setTextFieldMaxLength(txtCity, 40);
-        Constraints.setTextFieldMaxLength(txtDistrict, 30);
-        Constraints.setTextFieldMaxLength(txtStreet, 40);
-        Constraints.setTextFieldMaxLength(txtAddressComplement, 20);
-        Constraints.setTextFieldInteger(txtAddressNumber);
-    }*/
+    private void initializeNodes() {
+        tableColumnProductName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableColumnSize.setCellValueFactory(new PropertyValueFactory<>("size"));
+        showCategoryName();
+        tableColumnPurchaseValue.setCellValueFactory(new PropertyValueFactory<>("purchaseValue"));
+        tableColumnSalesValue.setCellValueFactory(new PropertyValueFactory<>("salesValue"));
+    }
 
-    /*public void updateFormData() {
+    public void updateFormData() {
         if (entity == null) {
             throw new IllegalStateException("Entity was null");
         }
@@ -247,33 +244,43 @@ public class SalesFormController implements Initializable, DataChangeListener {
             labelIdValue.setText(String.valueOf(entity.getId()));
         }
 
-        txtClientName.setText(entity.getClient().getName());
+        if (entity.getClient() != null) {
+            updateTextField(entity.getClient().getName());
+        }
 
-        if (entity.getSalesDate() != null) {
+        /*if (entity.getSalesDate() != null) {
             dpSalesDate.setValue(LocalDate.ofInstant(entity.getSalesDate().toInstant(), ZoneId.systemDefault()));
         }
         else {
             Utils.formatDatePicker(dpSalesDate, "dd/MM/yyyy");
-        }
+        }*/
     }
 
-    public void updateTableView() {
+    public void updateProductTableView(Clothes clothes) {
         if (clothesService == null) {
             throw new IllegalStateException("Service was null");
         }
-        List<Clothes> list = clothesService.findAll();
-        observableList = FXCollections.observableArrayList(list);
-        tableViewProducts.setItems(observableList);
-    }*/
 
-    private void createClientDialogForm(Client obj, String absoluteName, Stage parentStage) {
+        List<Clothes> list = entity.getClothes();
+        if (!list.contains(clothes)) {
+            entity.getClothes().add(clothes);
+            observableList = FXCollections.observableArrayList(list);
+            tableViewProducts.setItems(observableList);
+        }
+        else {
+            Alerts.showAlert("Item já adicionado", null, "Este item já está na lista!", Alert.AlertType.INFORMATION);
+        }
+    }
+
+    private void createClientDialogForm(Sales obj, String absoluteName, Stage parentStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
 
             SalesClientListController controller = loader.getController();
-            controller.setClient(obj);
-            controller.setClientService(new ClientService());
+            controller.setSales(obj);
+            controller.setServices(new ClientService());
+            controller.setSalesFormController(this);
             controller.subscribeDataChangeListener(this);
             controller.updateTableView();
 
@@ -284,6 +291,7 @@ public class SalesFormController implements Initializable, DataChangeListener {
             dialogStage.initOwner(parentStage);
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.showAndWait();
+
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -291,14 +299,15 @@ public class SalesFormController implements Initializable, DataChangeListener {
         }
     }
 
-    private void createProductDialogForm(Clothes obj, String absoluteName, Stage parentStage) {
+    private void createProductDialogForm(Sales obj, String absoluteName, Stage parentStage) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
 
             SalesProductListController controller = loader.getController();
-            controller.setClothes(obj);
-            controller.setClothesService(new ClothesService());
+            controller.setSales(obj);
+            controller.setServices(new ClothesService());
+            controller.setSalesFormController(this);
             controller.subscribeDataChangeListener(this);
             controller.updateTableView();
 
@@ -321,6 +330,26 @@ public class SalesFormController implements Initializable, DataChangeListener {
 
     }
 
+    public void updateTextField(String clientName) {
+        txtClientName.setText(clientName);
+    }
+
+    private void showCategoryName() {
+        tableColumnCategoryName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategory().getName()));
+        tableColumnCategoryName.setCellFactory(column -> new TableCell<Clothes, String>() {
+            @Override
+            protected void updateItem(String categoryName, boolean empty) {
+                super.updateItem(categoryName, empty);
+
+                if (categoryName == null) {
+                    setText(null);
+                }
+                else {
+                    setText(categoryName);
+                }
+            }
+        });
+    }
 
     /*private void setErrorMessages(Map<String, String> errors) {
         Set<String> fields = errors.keySet();

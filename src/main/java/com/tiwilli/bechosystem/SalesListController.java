@@ -214,7 +214,7 @@ public class SalesListController implements Initializable, DataChangeListener {
                 controller.setSales(obj);
                 controller.setServices(new SalesService(), new ClientService(), new ClothesService());
                 controller.subscribeDataChangeListener(this);
-                //controller.updateFormData();
+                controller.updateFormData();
 
                 Stage dialogStage = new Stage();
                 dialogStage.setTitle("Entre com os dados do salese");
