@@ -2,6 +2,7 @@ package com.tiwilli.bechosystem.model.services;
 
 import com.tiwilli.bechosystem.model.dao.SalesDao;
 import com.tiwilli.bechosystem.model.dao.factories.DaoFactory;
+import com.tiwilli.bechosystem.model.entities.Clothes;
 import com.tiwilli.bechosystem.model.entities.Sales;
 
 import java.util.List;
@@ -29,6 +30,14 @@ public class SalesService {
 
     public void remove(Sales obj) {
         dao.deleteById(obj.getId());
+    }
+
+    public int setQuantity(List<Clothes> clothes) {
+        int sum = 0;
+        for (Clothes item : clothes) {
+            sum += 1;
+        }
+        return sum;
     }
 
 }

@@ -69,7 +69,7 @@ public class SalesClientListController implements Initializable, DataChangeListe
             sales.setClient(selectedClient);
             notifyDataChangeListeners();
             Utils.currentStage(event).close();
-            salesFormController.updateTextField(sales.getClient().getName());
+            salesFormController.updateClient(sales.getClient());
         }
         else {
             Alerts.showAlert("Nenhum item selecionado", null, "Selecione um item", Alert.AlertType.WARNING);

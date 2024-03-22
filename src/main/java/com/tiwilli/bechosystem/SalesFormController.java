@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;
@@ -37,10 +38,6 @@ public class SalesFormController implements Initializable, DataChangeListener {
     private Sales entity;
 
     private SalesService service;
-
-    private Client client;
-
-    private ClientService clientService;
 
     private Clothes clothes;
 
@@ -107,36 +104,59 @@ public class SalesFormController implements Initializable, DataChangeListener {
         this.entity = entity;
     }
 
+    public void setClothes(Clothes clothes) {
+        this.clothes = clothes;
+    }
+
     public void setServices(SalesService service, ClientService clientService, ClothesService clothesService) {
         this.service = service;
-        this.clientService = clientService;
         this.clothesService = clothesService;
     }
 
-    /*@FXML
+    @FXML
     public void onBtSaveAction(ActionEvent event) {
         if (entity == null) {
             throw new IllegalStateException("Entity was null");
+        }
+
+        if (clothes == null) {
+            throw new IllegalStateException("ClothesEntity was null");
         }
 
         if (service == null) {
             throw new IllegalStateException("Service was null");
         }
 
+        if (clothesService == null) {
+            throw new IllegalStateException("ClothesService was null");
+        }
+
         try {
             entity = getFormData();
             service.saveOrUpdate(entity);
+
+
+            for (Clothes item : entity.getClothes()) {
+                item.setSales(entity);
+                clothesService.saveOrUpdate(item);
+            }
+
             notifyDataChangeListeners();
             Utils.currentStage(event).close();
         }
         catch (ValidationException e) {
-            setErrorMessages(e.getErrors());
+            //setErrorMessages(e.getErrors());
         }
         catch (DbException e) {
             e.printStackTrace();
             Alerts.showAlert("Erro!", null, "Erro ao salvar o objeto", Alert.AlertType.ERROR);
         }
-    }*/
+        catch (NullPointerException e) {
+            for (Clothes item : entity.getClothes()) {
+                System.out.println(clothes.getSales());
+            }
+        }
+    }
 
     private void notifyDataChangeListeners() {
         for (DataChangeListener listener : dataChangeListeners) {
@@ -144,63 +164,38 @@ public class SalesFormController implements Initializable, DataChangeListener {
         }
     }
 
-    /*private Sales getFormData() {
+    private Sales getFormData() {
         Sales obj = new Sales();
-        Client client = new Client();
+        Client client = entity.getClient();
         ValidationException exception = new ValidationException("Validation error");
 
         obj.setId(Utils.tryParseToInt(labelIdValue.getText()));
+        obj.setClient(client);
+
+        for (Clothes item : entity.getClothes()) {
+            obj.getClothes().add(item);
+        }
+
+        obj.setQuantity(service.setQuantity(entity.getClothes()));
 
         if (txtClientName.getText() == null || txtClientName.getText().trim().isEmpty()) {
             exception.addError("name", "Campo requerido");
         }
-        obj.setClient();
 
-        obj.setPhone(txtPhone.getText());
-        obj.setEmail(txtEmail.getText());
-
-        if (txtZipCode.getText() == null || txtZipCode.getText().trim().isEmpty()) {
-            exception.addError("zipCode", "Campo requerido");
+        if (dpSalesDate.getValue() == null) {
+            obj.setSalesDate(null);
         }
-        SalesAddress.setZipCode(txtZipCode.getText());
-
-        if (txtState.getText() == null || txtState.getText().trim().isEmpty()) {
-            exception.addError("state", "Campo requerido");
+        else {
+            Instant instantSales = Instant.from(dpSalesDate.getValue().atStartOfDay(ZoneId.systemDefault()));
+            obj.setSalesDate(Date.from(instantSales));
         }
-        SalesAddress.setState(txtState.getText());
-
-        if (txtCity.getText() == null || txtCity.getText().trim().isEmpty()) {
-            exception.addError("city", "Campo requerido");
-        }
-        SalesAddress.setCity(txtCity.getText());
-
-        if (txtDistrict.getText() == null || txtDistrict.getText().trim().isEmpty()) {
-            exception.addError("district", "Campo requerido");
-        }
-        SalesAddress.setDistrict(txtDistrict.getText());
-
-        if (txtStreet.getText() == null || txtStreet.getText().trim().isEmpty()) {
-            exception.addError("street", "Campo requerido");
-        }
-        SalesAddress.setStreet(txtStreet.getText());
-
-        if (txtAddressComplement.getText() == null || txtAddressComplement.getText().trim().isEmpty()) {
-            exception.addError("addressComplement", "Campo requerido");
-        }
-        SalesAddress.setAddressComplement(txtAddressComplement.getText());
-
-        if (txtAddressNumber.getText() == null || txtAddressNumber.getText().trim().isEmpty()) {
-            exception.addError("number", "Campo requerido");
-        }
-        SalesAddress.setNumber(Utils.tryParseToInt(txtAddressNumber.getText()));
 
         if (!exception.getErrors().isEmpty()) {
             throw exception;
         }
 
-        obj.setAddress(SalesAddress);
         return obj;
-    }*/
+    }
 
     @FXML
     public void onBtCancelAction(ActionEvent event) {
@@ -232,6 +227,7 @@ public class SalesFormController implements Initializable, DataChangeListener {
         showCategoryName();
         tableColumnPurchaseValue.setCellValueFactory(new PropertyValueFactory<>("purchaseValue"));
         tableColumnSalesValue.setCellValueFactory(new PropertyValueFactory<>("salesValue"));
+
     }
 
     public void updateFormData() {
@@ -245,22 +241,18 @@ public class SalesFormController implements Initializable, DataChangeListener {
         }
 
         if (entity.getClient() != null) {
-            updateTextField(entity.getClient().getName());
+            updateClient(entity.getClient());
         }
 
-        /*if (entity.getSalesDate() != null) {
+        if (entity.getSalesDate() != null) {
             dpSalesDate.setValue(LocalDate.ofInstant(entity.getSalesDate().toInstant(), ZoneId.systemDefault()));
         }
         else {
             Utils.formatDatePicker(dpSalesDate, "dd/MM/yyyy");
-        }*/
+        }
     }
 
     public void updateProductTableView(Clothes clothes) {
-        if (clothesService == null) {
-            throw new IllegalStateException("Service was null");
-        }
-
         List<Clothes> list = entity.getClothes();
         if (!list.contains(clothes)) {
             entity.getClothes().add(clothes);
@@ -330,8 +322,10 @@ public class SalesFormController implements Initializable, DataChangeListener {
 
     }
 
-    public void updateTextField(String clientName) {
-        txtClientName.setText(clientName);
+    public void updateClient(Client client) {
+        entity.setClient(client);
+        txtClientName.setText(client.getName());
+
     }
 
     private void showCategoryName() {

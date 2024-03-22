@@ -113,6 +113,10 @@ public class Utils {
         st.setDouble(index, Objects.requireNonNullElse(value, 0.0));
     }
 
+    public static void trySetPreparedStatementToInt(PreparedStatement st, int index, Integer value) throws SQLException {
+        st.setInt(index, Objects.requireNonNullElse(value, null));
+    }
+
     public static void trySetPreparedStatementToDate(PreparedStatement st, int index, Date date) throws SQLException {
         if (date == null) {
             st.setNull(index, Types.DATE);

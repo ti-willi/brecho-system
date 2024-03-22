@@ -31,8 +31,8 @@ public class ClothesDaoJDBC implements ClothesDao {
         try {
             st = conn.prepareStatement("""
                     INSERT INTO clothes
-                    (name, size, purchase_value, sales_value, purchase_date, sales_date, post_date, status, category_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (name, size, purchase_value, sales_value, purchase_date, sales_date, post_date, status, category_id, sales_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     Statement.RETURN_GENERATED_KEYS);
 
@@ -45,6 +45,7 @@ public class ClothesDaoJDBC implements ClothesDao {
             Utils.trySetPreparedStatementToDate(st, 7, obj.getPostDate());
             st.setInt(8, obj.getStatus().getCode());
             st.setInt(9, obj.getCategory().getId());
+            Utils.trySetPreparedStatementToInt(st, 10, obj.getSales().getId());
 
             int rowsAffected = st.executeUpdate();
 
@@ -76,7 +77,7 @@ public class ClothesDaoJDBC implements ClothesDao {
             st = conn.prepareStatement("""
                             UPDATE clothes
                             SET name = ?, size = ?, purchase_value = ?, sales_value = ?, purchase_date = ?,
-                            sales_date = ?, post_date = ?, status = ?, category_id = ?
+                            sales_date = ?, post_date = ?, status = ?, category_id = ?, sales_id = ?
                             WHERE id = ?
                             """);
 
@@ -89,6 +90,7 @@ public class ClothesDaoJDBC implements ClothesDao {
             Utils.trySetPreparedStatementToDate(st, 7, obj.getPostDate());
             st.setInt(8, obj.getStatus().getCode());
             st.setInt(9, obj.getCategory().getId());
+            Utils.trySetPreparedStatementToInt(st, 10, obj.getSales().getId());
             st.setInt(11, obj.getId());
 
             st.executeUpdate();
@@ -201,7 +203,6 @@ public class ClothesDaoJDBC implements ClothesDao {
                     cat = instantiateCategory(rs);
                     map.put(rs.getInt("category_id"), cat);
                 }
-
 
                 Clothes obj = instantiateClothes(rs, cat);
                 list.add(obj);

@@ -4,6 +4,7 @@ import com.tiwilli.bechosystem.db.DbIntegrityException;
 import com.tiwilli.bechosystem.gui.listeners.DataChangeListener;
 import com.tiwilli.bechosystem.gui.util.Alerts;
 import com.tiwilli.bechosystem.gui.util.Utils;
+import com.tiwilli.bechosystem.model.entities.Clothes;
 import com.tiwilli.bechosystem.model.entities.Sales;
 import com.tiwilli.bechosystem.model.services.ClientService;
 import com.tiwilli.bechosystem.model.services.ClothesService;
@@ -105,16 +106,18 @@ public class SalesListController implements Initializable, DataChangeListener {
     public void onBtRegisterAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
         Sales obj = new Sales();
-        createDialogForm(obj, "SalesForm.fxml", parentStage);
+        Clothes clothes = new Clothes();
+        createDialogForm(obj, clothes, "SalesForm.fxml", parentStage);
     }
 
     @FXML
     public void onBtEditAction(ActionEvent event) {
         Sales obj = salesTableView.getSelectionModel().getSelectedItem();
+        Clothes clothes = new Clothes();
 
         if (obj != null) {
             Stage parentStage = Utils.currentStage(event);
-            createDialogForm(obj,"SalesForm.fxml", parentStage);
+            createDialogForm(obj, clothes, "SalesForm.fxml", parentStage);
             salesTableView.refresh();
         }
         else {
@@ -205,13 +208,14 @@ public class SalesListController implements Initializable, DataChangeListener {
         salesTableView.setItems(observableList);
     }
 
-    private void createDialogForm(Sales obj, String absoluteName, Stage parentStage) {
+    private void createDialogForm(Sales obj, Clothes clothes, String absoluteName, Stage parentStage) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
                 Pane pane = loader.load();
 
                 SalesFormController controller = loader.getController();
                 controller.setSales(obj);
+                controller.setClothes(clothes);
                 controller.setServices(new SalesService(), new ClientService(), new ClothesService());
                 controller.subscribeDataChangeListener(this);
                 controller.updateFormData();
