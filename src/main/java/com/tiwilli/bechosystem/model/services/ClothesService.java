@@ -4,6 +4,7 @@ import com.tiwilli.bechosystem.model.dao.ClothesDao;
 import com.tiwilli.bechosystem.model.dao.factories.DaoFactory;
 import com.tiwilli.bechosystem.model.entities.Category;
 import com.tiwilli.bechosystem.model.entities.Clothes;
+import com.tiwilli.bechosystem.model.entities.Sales;
 
 import java.util.List;
 
@@ -35,4 +36,9 @@ public class ClothesService {
     public List<Clothes> findByCategory(Category category) {
         return dao.findByCategory(category);
     }
+
+    public List<Clothes> findBySales(Sales sales) {
+        return dao.findBySales(sales);
+    }
+
 }

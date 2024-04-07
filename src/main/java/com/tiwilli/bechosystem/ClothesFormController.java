@@ -257,7 +257,7 @@ public class ClothesFormController implements Initializable {
 
     public void loadAssociatedObjects() {
         if (categoryService == null) {
-            throw new IllegalStateException("DepartmentService was null");
+            throw new IllegalStateException("CategoryService was null");
         }
 
         List<Category> list = categoryService.findAll();

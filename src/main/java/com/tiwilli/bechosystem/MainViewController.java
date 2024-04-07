@@ -64,7 +64,7 @@ public class MainViewController implements Initializable {
     @FXML
     public void onMenuItemSalesAction() {
         loadView("SalesList.fxml", (SalesListController controller) -> {
-            controller.setSalesService(new SalesService());
+            controller.setServices(new SalesService(), new ClothesService());
             controller.updateTableView();
         });
     }

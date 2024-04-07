@@ -8,10 +8,10 @@ import java.util.Objects;
 public class Sales {
 
     private Integer id;
-
     private Date salesDate;
-
     private Integer quantity;
+    private Double totalAmount;
+    private Double profit;
 
     private Client client;
 
@@ -20,11 +20,13 @@ public class Sales {
     public Sales() {
     }
 
-    public Sales(Integer id, Date salesDate, Integer quantity, Client client) {
+    public Sales(Integer id, Date salesDate, Integer quantity, Double totalAmount, Double profit, Client client) {
         this.id = id;
-        this.client = client;
-        this.quantity = quantity;
         this.salesDate = salesDate;
+        this.quantity = quantity;
+        this.totalAmount = totalAmount;
+        this.profit = profit;
+        this.client = client;
     }
 
     public Integer getId() {
@@ -67,20 +69,20 @@ public class Sales {
         return clothes;
     }
 
-    public double getTotalAmount() {
-        double sum = 0;
-        for (Clothes item : clothes) {
-            sum += item.getSalesValue();
-        }
-        return sum;
+    public Double getTotalAmount() {
+        return totalAmount;
     }
 
-    public double getProfit() {
-        double sum = 0;
-        for (Clothes item : clothes) {
-            sum += (item.getSalesValue() - item.getPurchaseValue());
-        }
-        return sum;
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public Double getProfit() {
+        return profit;
+    }
+
+    public void setProfit(Double profit) {
+        this.profit = profit;
     }
 
     @Override

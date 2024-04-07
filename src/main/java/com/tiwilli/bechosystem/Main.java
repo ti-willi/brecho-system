@@ -2,10 +2,7 @@ package com.tiwilli.bechosystem;
 
 import com.tiwilli.bechosystem.model.entities.*;
 import com.tiwilli.bechosystem.model.entities.enums.ClothesStatus;
-import com.tiwilli.bechosystem.model.services.CategoryService;
-import com.tiwilli.bechosystem.model.services.ClientAddressService;
-import com.tiwilli.bechosystem.model.services.ClientService;
-import com.tiwilli.bechosystem.model.services.ClothesService;
+import com.tiwilli.bechosystem.model.services.*;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -44,19 +41,19 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch();
 
-        /*Category cat = new Category(null, "baba");
-        CategoryService categoryService = new CategoryService();
-        categoryService.saveOrUpdate(cat);
+        //Category cat = new Category(1, "baba");
+        //CategoryService categoryService = new CategoryService();
+        //categoryService.saveOrUpdate(cat);
 
-        Clothes clothes = new Clothes(null, "bota", "p", 20.0, 30.0, null, null, null, ClothesStatus.POSTED, cat);
-        ClothesService service = new ClothesService();
-        service.saveOrUpdate(clothes);*/
+        //Clothes clothes = new Clothes(1, "bota", "p", 20.0, 30.0, Date.from(Instant.now()), Date.from(Instant.now()), Date.from(Instant.now()), ClothesStatus.POSTED, cat);
+        //ClothesService service = new ClothesService();
+        //service.saveOrUpdate(clothes);
 
-        /*ClientAddress address = new ClientAddress(null, "Rio Grande do Sul", "Porto Alegre", "Auxiliadora", "Rua Eudoro Berlink", "Apto 405", 495, "90450-030");
-        ClientAddressService addressService = new ClientAddressService();
-        addressService.saveOrUpdate(address);
+        //ClientAddress address = new ClientAddress(1, "Rio Grande do Sul", "Porto Alegre", "Auxiliadora", "Rua Eudoro Berlink", "Apto 405", 495, "90450-030");
+        //ClientAddressService addressService = new ClientAddressService();
+        //addressService.saveOrUpdate(address);
 
-        Client client = new Client(null, "Maria", "999997777", "maria@gmail.com", address);
+        /*Client client = new Client(null, "Maria", "999997777", "maria@gmail.com", address);
         ClientService clientService = new ClientService();
         clientService.saveOrUpdate(client);*/
 

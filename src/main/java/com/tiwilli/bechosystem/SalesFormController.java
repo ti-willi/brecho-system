@@ -4,7 +4,6 @@ import com.tiwilli.bechosystem.db.DbException;
 import com.tiwilli.bechosystem.gui.exceptions.ValidationException;
 import com.tiwilli.bechosystem.gui.listeners.DataChangeListener;
 import com.tiwilli.bechosystem.gui.util.Alerts;
-import com.tiwilli.bechosystem.gui.util.Constraints;
 import com.tiwilli.bechosystem.gui.util.Utils;
 import com.tiwilli.bechosystem.model.entities.Client;
 import com.tiwilli.bechosystem.model.entities.Clothes;
@@ -39,9 +38,9 @@ public class SalesFormController implements Initializable, DataChangeListener {
 
     private SalesService service;
 
-    private Clothes clothes;
-
     private ClothesService clothesService;
+
+    private SalesListController salesListController;
 
     private List<DataChangeListener> dataChangeListeners = new ArrayList<>();
 
@@ -104,23 +103,19 @@ public class SalesFormController implements Initializable, DataChangeListener {
         this.entity = entity;
     }
 
-    public void setClothes(Clothes clothes) {
-        this.clothes = clothes;
-    }
-
-    public void setServices(SalesService service, ClientService clientService, ClothesService clothesService) {
+    public void setServices(SalesService service, ClothesService clothesService) {
         this.service = service;
         this.clothesService = clothesService;
+    }
+
+    public void setSalesListController(SalesListController salesListController) {
+        this.salesListController = salesListController;
     }
 
     @FXML
     public void onBtSaveAction(ActionEvent event) {
         if (entity == null) {
             throw new IllegalStateException("Entity was null");
-        }
-
-        if (clothes == null) {
-            throw new IllegalStateException("ClothesEntity was null");
         }
 
         if (service == null) {
@@ -135,13 +130,13 @@ public class SalesFormController implements Initializable, DataChangeListener {
             entity = getFormData();
             service.saveOrUpdate(entity);
 
-
             for (Clothes item : entity.getClothes()) {
                 item.setSales(entity);
                 clothesService.saveOrUpdate(item);
             }
 
             notifyDataChangeListeners();
+            salesListController.updateTableView();
             Utils.currentStage(event).close();
         }
         catch (ValidationException e) {
@@ -150,11 +145,6 @@ public class SalesFormController implements Initializable, DataChangeListener {
         catch (DbException e) {
             e.printStackTrace();
             Alerts.showAlert("Erro!", null, "Erro ao salvar o objeto", Alert.AlertType.ERROR);
-        }
-        catch (NullPointerException e) {
-            for (Clothes item : entity.getClothes()) {
-                System.out.println(clothes.getSales());
-            }
         }
     }
 
@@ -177,6 +167,8 @@ public class SalesFormController implements Initializable, DataChangeListener {
         }
 
         obj.setQuantity(service.setQuantity(entity.getClothes()));
+        obj.setTotalAmount(service.setTotalAmount(entity.getClothes()));
+        obj.setProfit(service.setProfit(entity.getClothes()));
 
         if (txtClientName.getText() == null || txtClientName.getText().trim().isEmpty()) {
             exception.addError("name", "Campo requerido");
@@ -250,18 +242,27 @@ public class SalesFormController implements Initializable, DataChangeListener {
         else {
             Utils.formatDatePicker(dpSalesDate, "dd/MM/yyyy");
         }
+
+        setTableViewProducts();
+
     }
 
     public void updateProductTableView(Clothes clothes) {
-        List<Clothes> list = entity.getClothes();
-        if (!list.contains(clothes)) {
-            entity.getClothes().add(clothes);
-            observableList = FXCollections.observableArrayList(list);
-            tableViewProducts.setItems(observableList);
-        }
-        else {
+        if (observableList.contains(clothes)) {
             Alerts.showAlert("Item já adicionado", null, "Este item já está na lista!", Alert.AlertType.INFORMATION);
         }
+        else {
+            entity.getClothes().add(clothes);
+            tableViewProducts.getItems().add(clothes);
+
+        }
+    }
+
+    private void setTableViewProducts() {
+        List<Clothes> clothesList = clothesService.findBySales(entity);
+        entity.getClothes().addAll(clothesList);
+        observableList = FXCollections.observableArrayList(clothesList);
+        tableViewProducts.setItems(observableList);
     }
 
     private void createClientDialogForm(Sales obj, String absoluteName, Stage parentStage) {
@@ -319,7 +320,6 @@ public class SalesFormController implements Initializable, DataChangeListener {
 
     @Override
     public void onDataChanged() {
-
     }
 
     public void updateClient(Client client) {

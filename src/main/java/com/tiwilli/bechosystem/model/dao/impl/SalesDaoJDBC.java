@@ -82,6 +82,7 @@ public class SalesDaoJDBC implements SalesDao {
             st.setInt(3, obj.getQuantity());
             Utils.trySetPreparedStatementToDouble(st, 4,obj.getTotalAmount());
             Utils.trySetPreparedStatementToDouble(st, 5, obj.getProfit());
+            st.setInt(6, obj.getId());
 
             st.executeUpdate();
         }
@@ -147,15 +148,19 @@ public class SalesDaoJDBC implements SalesDao {
 
     private Sales instantiateSales(ResultSet rs, Client client) throws SQLException {
         Sales obj = new Sales();
+        obj.setId(rs.getInt("id"));
         obj.setClient(client);
         obj.setSalesDate(Utils.getDateOrNull(rs, "sales_date"));
         obj.setQuantity(rs.getInt("quantity"));
+        obj.setTotalAmount(rs.getDouble("total_amount"));
+        obj.setProfit(rs.getDouble("profit"));
         return obj;
     }
 
     private Client instantiateClient(ResultSet rs) throws SQLException {
         Client client = new Client();
         client.setId(rs.getInt("client_id"));
+        client.setName(rs.getString("client_name"));
         return client;
     }
 
@@ -166,7 +171,8 @@ public class SalesDaoJDBC implements SalesDao {
 
         try {
             st = conn.prepareStatement("""
-                            SELECT * FROM sales
+                            SELECT sales.*, client.name as client_name
+                            FROM sales
                             INNER JOIN client ON sales.client_id = client.id
                             """);
 
@@ -175,7 +181,6 @@ public class SalesDaoJDBC implements SalesDao {
             List<Sales> list = new ArrayList<>();
 
             while (rs.next()) {
-
                 Client client = instantiateClient(rs);
                 Sales obj = instantiateSales(rs, client);
                 list.add(obj);

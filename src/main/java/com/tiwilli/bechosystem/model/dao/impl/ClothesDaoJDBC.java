@@ -5,9 +5,7 @@ import com.tiwilli.bechosystem.db.DbException;
 import com.tiwilli.bechosystem.db.DbIntegrityException;
 import com.tiwilli.bechosystem.gui.util.Utils;
 import com.tiwilli.bechosystem.model.dao.ClothesDao;
-import com.tiwilli.bechosystem.model.entities.Category;
-import com.tiwilli.bechosystem.model.entities.Clothes;
-import com.tiwilli.bechosystem.model.entities.Sales;
+import com.tiwilli.bechosystem.model.entities.*;
 import com.tiwilli.bechosystem.model.entities.enums.ClothesStatus;
 
 import java.sql.*;
@@ -31,8 +29,8 @@ public class ClothesDaoJDBC implements ClothesDao {
         try {
             st = conn.prepareStatement("""
                     INSERT INTO clothes
-                    (name, size, purchase_value, sales_value, purchase_date, sales_date, post_date, status, category_id, sales_id)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (name, size, purchase_value, sales_value, purchase_date, sales_date, post_date, status, category_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     Statement.RETURN_GENERATED_KEYS);
 
@@ -45,7 +43,6 @@ public class ClothesDaoJDBC implements ClothesDao {
             Utils.trySetPreparedStatementToDate(st, 7, obj.getPostDate());
             st.setInt(8, obj.getStatus().getCode());
             st.setInt(9, obj.getCategory().getId());
-            Utils.trySetPreparedStatementToInt(st, 10, obj.getSales().getId());
 
             int rowsAffected = st.executeUpdate();
 
@@ -90,7 +87,14 @@ public class ClothesDaoJDBC implements ClothesDao {
             Utils.trySetPreparedStatementToDate(st, 7, obj.getPostDate());
             st.setInt(8, obj.getStatus().getCode());
             st.setInt(9, obj.getCategory().getId());
-            Utils.trySetPreparedStatementToInt(st, 10, obj.getSales().getId());
+
+            if (obj.getSales() != null) {
+                st.setInt(10, obj.getSales().getId());
+            }
+            else {
+                st.setNull(10, Types.INTEGER);
+            }
+
             st.setInt(11, obj.getId());
 
             st.executeUpdate();
@@ -171,11 +175,33 @@ public class ClothesDaoJDBC implements ClothesDao {
         return obj;
     }
 
+    private Clothes instantiateClothes(ResultSet rs, Category cat, Sales sales) throws SQLException {
+        Clothes obj = new Clothes();
+        obj.setId(rs.getInt("id"));
+        obj.setName(rs.getString("name"));
+        obj.setSize(rs.getString("size"));
+        obj.setPurchaseValue(rs.getDouble("purchase_value"));
+        obj.setSalesValue(rs.getDouble("sales_value"));
+        obj.setPurchaseDate(Utils.getDateOrNull(rs, "purchase_date"));
+        obj.setSalesDate(Utils.getDateOrNull(rs, "sales_date"));
+        obj.setPostDate(Utils.getDateOrNull(rs, "post_date"));
+        obj.setStatus(ClothesStatus.valueOf(rs.getInt("status")));
+        obj.setCategory(cat);
+        obj.setSales(sales);
+        return obj;
+    }
+
     private Category instantiateCategory(ResultSet rs) throws SQLException {
         Category cat = new Category();
         cat.setId(rs.getInt("category_id"));
         cat.setName(rs.getString("cat_name"));
         return cat;
+    }
+
+    private Sales instantiateSales(ResultSet rs) throws SQLException {
+        Sales sales = new Sales();
+        sales.setId(rs.getInt("sales_id"));
+        return sales;
     }
 
     @Override
@@ -258,4 +284,55 @@ public class ClothesDaoJDBC implements ClothesDao {
             DB.closeResultSet(rs);
         }
     }
+
+    @Override
+    public List<Clothes> findBySales(Sales sales) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            st = conn.prepareStatement("""
+                    SELECT clothes.*, category.name as cat_name, sales.id as sales_id
+                    FROM clothes
+                    INNER JOIN category ON clothes.category_id = category.id
+                    INNER JOIN sales ON clothes.sales_id = sales.id
+                    WHERE sales_id = ?
+                    ORDER BY UPPER(clothes.name)
+                    """);
+
+            if (sales.getId() == null) {
+                st.setNull(1, Types.INTEGER);
+            }
+            else {
+                st.setInt(1, sales.getId());
+            }
+
+            rs = st.executeQuery();
+
+            List<Clothes> list = new ArrayList<>();
+            Map<Integer, Category> map = new HashMap<>();
+
+            while (rs.next()) {
+
+                Category cat = map.get(rs.getInt("category_id"));
+                if (cat == null) {
+                    cat = instantiateCategory(rs);
+                    map.put(rs.getInt("category_id"), cat);
+                }
+
+                Sales sls = instantiateSales(rs);
+                Clothes obj = instantiateClothes(rs, cat, sls);
+                list.add(obj);
+            }
+            return list;
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
 }

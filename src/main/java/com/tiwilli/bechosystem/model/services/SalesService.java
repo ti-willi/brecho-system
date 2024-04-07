@@ -40,4 +40,20 @@ public class SalesService {
         return sum;
     }
 
+    public double setTotalAmount(List<Clothes> clothes) {
+        double sum = 0;
+        for (Clothes item : clothes) {
+            sum += item.getSalesValue();
+        }
+        return sum;
+    }
+
+    public double setProfit(List<Clothes> clothes) {
+        double sum = 0;
+        for (Clothes item : clothes) {
+            sum += (item.getSalesValue() - item.getPurchaseValue());
+        }
+        return sum;
+    }
+
 }

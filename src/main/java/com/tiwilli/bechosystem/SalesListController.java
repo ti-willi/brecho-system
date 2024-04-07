@@ -80,15 +80,8 @@ public class SalesListController implements Initializable, DataChangeListener {
 
     private ObservableList<Sales> observableList;
 
-    public void setSalesService(SalesService service) {
+    public void setServices(SalesService service, ClothesService clothesService) {
         this.service = service;
-    }
-
-    public void setClientService(ClientService clientService) {
-        this.clientService = clientService;
-    }
-
-    public void setClothesService(ClothesService clothesService) {
         this.clothesService = clothesService;
     }
 
@@ -106,18 +99,16 @@ public class SalesListController implements Initializable, DataChangeListener {
     public void onBtRegisterAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
         Sales obj = new Sales();
-        Clothes clothes = new Clothes();
-        createDialogForm(obj, clothes, "SalesForm.fxml", parentStage);
+        createDialogForm(obj, "SalesForm.fxml", parentStage);
     }
 
     @FXML
     public void onBtEditAction(ActionEvent event) {
         Sales obj = salesTableView.getSelectionModel().getSelectedItem();
-        Clothes clothes = new Clothes();
 
         if (obj != null) {
             Stage parentStage = Utils.currentStage(event);
-            createDialogForm(obj, clothes, "SalesForm.fxml", parentStage);
+            createDialogForm(obj,"SalesForm.fxml", parentStage);
             salesTableView.refresh();
         }
         else {
@@ -166,7 +157,7 @@ public class SalesListController implements Initializable, DataChangeListener {
         showClientNameColumn();
         tableColumnQuantity.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         tableColumnSalesDate.setCellValueFactory(new PropertyValueFactory<>("salesDate"));
-        showTotalValueColumn();
+        tableColumnTotalAmount.setCellValueFactory(new PropertyValueFactory<>("totalAmount"));
         Stage stage = (Stage) Main.getMainScene().getWindow();
         salesTableView.prefHeightProperty().bind(stage.heightProperty());
 
@@ -208,15 +199,15 @@ public class SalesListController implements Initializable, DataChangeListener {
         salesTableView.setItems(observableList);
     }
 
-    private void createDialogForm(Sales obj, Clothes clothes, String absoluteName, Stage parentStage) {
+    private void createDialogForm(Sales obj, String absoluteName, Stage parentStage) {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
                 Pane pane = loader.load();
 
                 SalesFormController controller = loader.getController();
                 controller.setSales(obj);
-                controller.setClothes(clothes);
-                controller.setServices(new SalesService(), new ClientService(), new ClothesService());
+                controller.setServices(new SalesService(), new ClothesService());
+                controller.setSalesListController(this);
                 controller.subscribeDataChangeListener(this);
                 controller.updateFormData();
 
@@ -246,20 +237,8 @@ public class SalesListController implements Initializable, DataChangeListener {
             protected void updateItem(String clientName, boolean empty) {
                 super.updateItem(clientName, empty);
 
-                if (clientName == null) {
-                    setText(null);
-                }
-                else {
-                    setText(clientName);
-                }
+                setText(clientName);
             }
-        });
-    }
-
-    private void showTotalValueColumn() {
-        tableColumnTotalAmount.setCellValueFactory(cellData -> {
-            double totalAmount = cellData.getValue().getTotalAmount();
-            return new SimpleDoubleProperty(totalAmount).asObject();
         });
     }
 
