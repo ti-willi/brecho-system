@@ -135,7 +135,7 @@ public class ClothesListController implements Initializable, DataChangeListener 
                     clearItemsClothesTableView();
                 }
                 catch (DbIntegrityException e) {
-                    Alerts.showAlert("Erro!", null, "Você não pode remover uma categoria associada a um produto", Alert.AlertType.ERROR);
+                    Alerts.showAlert("Erro!", null, "Você não pode remover um produto associado a uma venda", Alert.AlertType.ERROR);
                 }
             }
         }

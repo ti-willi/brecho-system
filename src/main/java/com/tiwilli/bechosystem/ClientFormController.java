@@ -216,7 +216,7 @@ public class ClientFormController implements Initializable {
         if (txtAddressNumber.getText() == null || txtAddressNumber.getText().trim().isEmpty()) {
             exception.addError("number", "Campo requerido");
         }
-        clientAddress.setNumber(Utils.tryParseToInt(txtAddressNumber.getText()));
+        clientAddress.setNumber(txtAddressNumber.getText());
 
         if (!exception.getErrors().isEmpty()) {
             throw exception;

@@ -6,6 +6,7 @@ import com.tiwilli.bechosystem.gui.util.Alerts;
 import com.tiwilli.bechosystem.gui.util.Utils;
 import com.tiwilli.bechosystem.model.entities.Clothes;
 import com.tiwilli.bechosystem.model.entities.Sales;
+import com.tiwilli.bechosystem.model.services.ClientAddressService;
 import com.tiwilli.bechosystem.model.services.ClientService;
 import com.tiwilli.bechosystem.model.services.ClothesService;
 import com.tiwilli.bechosystem.model.services.SalesService;
@@ -86,16 +87,6 @@ public class SalesListController implements Initializable, DataChangeListener {
     }
 
     @FXML
-    public void obBtClientAction(ActionEvent event) {
-        System.out.println("btClient");
-    }
-
-    @FXML
-    public void onBtProductAction(ActionEvent event) {
-        System.out.println("btProduct");
-    }
-
-    @FXML
     public void onBtRegisterAction(ActionEvent event) {
         Stage parentStage = Utils.currentStage(event);
         Sales obj = new Sales();
@@ -127,9 +118,6 @@ public class SalesListController implements Initializable, DataChangeListener {
                 if (service == null) {
                     throw new IllegalStateException("Service was null");
                 }
-                if (clientService == null) {
-                    throw new IllegalStateException("ClientService was null");
-                }
                 if (clothesService == null) {
                     throw new IllegalStateException("ClothesService was null");
                 }
@@ -139,13 +127,31 @@ public class SalesListController implements Initializable, DataChangeListener {
                     clearItemsSalesTableView();
                 }
                 catch (DbIntegrityException e) {
-                    Alerts.showAlert("Erro!", null, "Você não pode remover uma categoria associada a um produto", Alert.AlertType.ERROR);
+                    Alerts.showAlert("Erro!", null, "Você não pode remover uma venda com produtos cadastrados! Remova os produtos para desfazer a venda", Alert.AlertType.ERROR);
                 }
             }
         }
         else {
             Alerts.showAlert("Nenhum salese selecionado", null, "Selecione um salese para excluir", Alert.AlertType.WARNING);
         }
+    }
+
+    @FXML
+    public void obBtClientAction(ActionEvent event) {
+        Sales obj = salesTableView.getSelectionModel().getSelectedItem();
+
+        if (obj != null) {
+            Stage parentStage = Utils.currentStage(event);
+            createClientDataList(obj,"SalesClientDataList.fxml", parentStage);
+        }
+        else {
+            Alerts.showAlert("Nenhum salese selecionado", null, "Selecione um sales para editar", Alert.AlertType.WARNING);
+        }
+    }
+
+    @FXML
+    public void onBtProductAction(ActionEvent event) {
+        System.out.println("btProduct");
     }
 
     @Override
@@ -166,6 +172,10 @@ public class SalesListController implements Initializable, DataChangeListener {
                     selectItemsSalesTableView(newValue);
                 }
         );
+
+        if (tableColumnSalesDate.getCellFactory() != null) {
+            Utils.formatTableColumnDate(tableColumnSalesDate, "dd/MM/yyyy");
+        }
     }
 
     private void selectItemsSalesTableView(Sales obj) {
@@ -223,6 +233,30 @@ public class SalesListController implements Initializable, DataChangeListener {
                 e.printStackTrace();
                 Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
             }
+    }
+
+    private void createClientDataList(Sales obj, String absoluteName, Stage parentStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            Pane pane = loader.load();
+
+            SalesClientListDataController controller = loader.getController();
+            controller.setClient(obj.getClient());
+            controller.setService(new ClientService());
+            controller.updateFormData();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Entre com os dados do salese");
+            dialogStage.setScene(new Scene(pane));
+            dialogStage.setResizable(false);
+            dialogStage.initOwner(parentStage);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.showAndWait();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
+        }
     }
 
     @Override

@@ -10,14 +10,14 @@ public class ClientAddress {
     private String district;
     private String street;
     private String addressComplement;
-    private Integer number;
+    private String number;
     private String zipCode;
 
 
     public ClientAddress() {
     }
 
-    public ClientAddress(Integer id, String state, String city, String district, String street, String addressComplement, Integer number, String zipCode) {
+    public ClientAddress(Integer id, String state, String city, String district, String street, String addressComplement, String number, String zipCode) {
         this.id = id;
         this.state = state;
         this.city = city;
@@ -76,11 +76,11 @@ public class ClientAddress {
         this.addressComplement = addressComplement;
     }
 
-    public Integer getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

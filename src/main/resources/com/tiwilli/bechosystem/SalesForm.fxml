@@ -46,7 +46,7 @@
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </Button>
-                        <Label fx:id="labelErrorName" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                        <Label fx:id="labelErrorClientName" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
@@ -92,7 +92,7 @@
                   <ToolBar prefHeight="42.0" prefWidth="547.0" AnchorPane.topAnchor="50.0">
                     <items>
                       <Button fx:id="btAddProduct" graphicTextGap="6.0" mnemonicParsing="false" onAction="#onBtAddProductAction" text="Adicionar" />
-                        <Button mnemonicParsing="false" text="Remover" />
+                        <Button fx:id="btRemoveProduct" mnemonicParsing="false" onAction="#onBtRemoveProductAction" text="Remover" />
                     </items>
                   </ToolBar>
                   <TableView fx:id="tableViewProducts" layoutX="108.0" layoutY="97.0" prefHeight="239.0" prefWidth="547.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="97.0">
@@ -109,7 +109,7 @@
                         <HBox alignment="BOTTOM_RIGHT" prefHeight="42.0" prefWidth="527.0" spacing="10.0">
                            <children>
                               <Button fx:id="btSave" mnemonicParsing="false" onAction="#onBtSaveAction" text="Salvar" />
-                              <Button mnemonicParsing="false" text="Cancelar" />
+                              <Button fx:id="btCancel" mnemonicParsing="false" onAction="#onBtCancelAction" text="Cancelar" />
                            </children>
                            <VBox.margin>
                               <Insets bottom="10.0" right="20.0" />

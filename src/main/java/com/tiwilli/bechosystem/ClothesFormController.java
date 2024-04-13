@@ -55,16 +55,16 @@ public class ClothesFormController implements Initializable {
     private DatePicker datePickerPurchase;
 
     @FXML
-    private DatePicker datePickerSale;
-
-    @FXML
-    private DatePicker datePickerPost;
-
-    @FXML
-    private ComboBox<String> comboBoxStatus;
-
-    @FXML
     private ComboBox<Category> comboBoxCategory;
+
+    @FXML
+    private Label labelSalesDate;
+
+    @FXML
+    private Label labelPostDate;
+
+    @FXML
+    private Label labelStatus;
 
     @FXML
     private Label labelErrorName;
@@ -161,26 +161,26 @@ public class ClothesFormController implements Initializable {
             obj.setPurchaseDate(Date.from(instantPurchase));
         }
 
-        if (datePickerSale.getValue() == null) {
+        if (labelSalesDate.getText() == null || labelSalesDate.getText().trim().isEmpty()) {
             obj.setSalesDate(null);
         }
         else {
-            Instant instantSale = Instant.from(datePickerSale.getValue().atStartOfDay(ZoneId.systemDefault()));
-            obj.setSalesDate(Date.from(instantSale));
+            String instantSale = labelSalesDate.getText();
+            obj.setSalesDate(Date.from(Instant.parse(instantSale)));
         }
 
-        if (datePickerPost.getValue() == null) {
-            obj.setPostDate(null);
+        if (labelPostDate.getText() == null || labelPostDate.getText().trim().isEmpty()) {
+            obj.setSalesDate(null);
         }
         else {
-            Instant instantPost = Instant.from(datePickerPost.getValue().atStartOfDay(ZoneId.systemDefault()));
-            obj.setPostDate(Date.from(instantPost));
+            String instantPost = labelPostDate.getText();
+            obj.setPostDate(Date.from(Instant.parse(instantPost)));
         }
 
-        if (comboBoxStatus.getValue() == null) {
-            exception.addError("status", "Selecione o status");
+        if (labelStatus.getText() == null || labelStatus.getText().trim().isEmpty()) {
+            obj.setStatus(null);
         }
-        obj.setStatus(ClothesStatus.fromDescription(comboBoxStatus.getValue()));
+        obj.setStatus(ClothesStatus.valueOf(labelStatus.getText()));
 
         if (comboBoxCategory.getValue() == null) {
             exception.addError("category", "Selecione uma categoria");
@@ -207,10 +207,7 @@ public class ClothesFormController implements Initializable {
     private void initializeNodes() {
         Constraints.setTextFieldMaxLength(txtSize, 5);
         Constraints.setTextFieldMaxLength(txtName, 30);
-        Utils.formatDatePicker(datePickerPost, "dd/MM/yyyy");
         Utils.formatDatePicker(datePickerPurchase, "dd/MM/yyyy");
-        Utils.formatDatePicker(datePickerSale, "dd/MM/yyyy");
-        initializeClothesStatusComboBox();
         initializeCategoryComboBox();
     }
 
@@ -238,19 +235,13 @@ public class ClothesFormController implements Initializable {
             Utils.formatDatePicker(datePickerPurchase, "dd/MM/yyyy");
         }
 
-        if (entity.getSalesDate() != null) {
-            datePickerSale.setValue(LocalDate.ofInstant(entity.getSalesDate().toInstant(), ZoneId.systemDefault()));
-        }
-        else {
-            Utils.formatDatePicker(datePickerSale, "dd/MM/yyyy");
-        }
+        labelSalesDate.setText(Utils.formatLabelDate(entity.getSalesDate(), "dd/MM/yyyy"));
+        labelPostDate.setText(Utils.formatLabelDate(entity.getPostDate(), "dd/MM/yyyy"));
 
-        if (entity.getPostDate() != null) {
-            datePickerPost.setValue(LocalDate.ofInstant(entity.getPostDate().toInstant(), ZoneId.systemDefault()));
+        if (entity.getStatus() == null) {
+            entity.setStatus(ClothesStatus.NOT_POSTED);
         }
-        else {
-            Utils.formatDatePicker(datePickerPost, "dd/MM/yyyy");
-        }
+        labelStatus.setText(entity.getStatus().getDescription());
 
         comboBoxCategory.setValue(entity.getCategory());
     }
@@ -271,18 +262,6 @@ public class ClothesFormController implements Initializable {
         labelErrorName.setText(fields.contains("name") ? errors.get("name") : "");
         labelErrorSize.setText(fields.contains("size") ? errors.get("size") : "");
         labelErrorCategory.setText(fields.contains("category") ? errors.get("category") : "");
-    }
-
-    public void initializeClothesStatusComboBox() {
-        List<String> list = new ArrayList<>();
-
-        for (ClothesStatus item : ClothesStatus.values()) {
-            list.add(item.getDescription());
-        }
-
-        obsListComboBox = FXCollections.observableArrayList(list);
-        comboBoxStatus.setItems(obsListComboBox);
-        comboBoxStatus.getSelectionModel().selectFirst();
     }
 
     private void initializeCategoryComboBox() {

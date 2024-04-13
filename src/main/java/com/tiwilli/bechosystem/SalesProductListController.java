@@ -6,6 +6,7 @@ import com.tiwilli.bechosystem.gui.util.Utils;
 import com.tiwilli.bechosystem.model.entities.Client;
 import com.tiwilli.bechosystem.model.entities.Clothes;
 import com.tiwilli.bechosystem.model.entities.Sales;
+import com.tiwilli.bechosystem.model.entities.enums.ClothesStatus;
 import com.tiwilli.bechosystem.model.services.ClientService;
 import com.tiwilli.bechosystem.model.services.ClothesService;
 import com.tiwilli.bechosystem.model.services.SalesService;
@@ -91,8 +92,8 @@ public class SalesProductListController implements Initializable, DataChangeList
         if (clothesService == null) {
             throw new IllegalStateException("Service was null");
         }
-        List<Clothes> list = clothesService.findAll();
-        observableList = FXCollections.observableArrayList(list);
+        List<Clothes> availableList = checkAvailableProducts();
+        observableList = FXCollections.observableArrayList(availableList);
         clothesTableView.setItems(observableList);
     }
 
@@ -109,6 +110,18 @@ public class SalesProductListController implements Initializable, DataChangeList
     @Override
     public void onDataChanged() {
         updateTableView();
+    }
+
+    private List<Clothes> checkAvailableProducts() {
+        List<Clothes> list = clothesService.findAll();
+        List<Clothes> availableProducts = new ArrayList<>();
+
+        for (Clothes item : list) {
+            if (item.getStatus() != ClothesStatus.SOLD) {
+                availableProducts.add(item);
+            }
+        }
+        return availableProducts;
     }
 
 }

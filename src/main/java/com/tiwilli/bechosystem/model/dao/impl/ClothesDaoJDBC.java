@@ -112,8 +112,15 @@ public class ClothesDaoJDBC implements ClothesDao {
         PreparedStatement st = null;
 
         try {
-            st = conn.prepareStatement(
-                    "DELETE FROM clothes WHERE id = ?");
+            st = conn.prepareStatement("""
+                        DELETE FROM clothes
+                        WHERE id = ?
+                        AND NOT EXISTS (
+                            SELECT 1
+                            FROM sales
+                            INNER JOIN sales ON clothes.sales_id = sales.id
+                        )
+                        """);
 
             st.setInt(1, id);
 
@@ -135,9 +142,10 @@ public class ClothesDaoJDBC implements ClothesDao {
 
         try {
             st = conn.prepareStatement("""
-                            SELECT clothes.*, category.name as cat_name
+                            SELECT clothes.*, category.name as cat_name, sales.id as sales_id
                             FROM clothes
                             INNER JOIN category ON clothes.category_id = category.id
+                            INNER JOIN sales ON clothes.sales_id = sales.id
                             WHERE clothes.id = ?
                             """
                     );
@@ -211,9 +219,10 @@ public class ClothesDaoJDBC implements ClothesDao {
 
         try {
             st = conn.prepareStatement("""
-                            SELECT clothes.*, category.name as cat_name
+                            SELECT clothes.*, category.name as cat_name, sales.id as sales_id
                             FROM clothes
                             INNER JOIN category ON clothes.category_id = category.id
+                            INNER JOIN sales ON clothes.sales_id = sales.id
                             ORDER BY UPPER(clothes.name)
                             """);
 

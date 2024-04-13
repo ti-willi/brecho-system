@@ -211,7 +211,7 @@ public class ClientDaoJDBC implements ClientDao {
         obj.setDistrict(rs.getString("addressDistrict"));
         obj.setStreet(rs.getString("addressStreet"));
         obj.setAddressComplement(rs.getString("addressComplement"));
-        obj.setNumber(rs.getInt("addressNumber"));
+        obj.setNumber(rs.getString("addressNumber"));
         obj.setZipCode(rs.getString("addressZipCode"));
         return obj;
     }

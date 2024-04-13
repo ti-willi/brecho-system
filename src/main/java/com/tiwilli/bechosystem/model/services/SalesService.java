@@ -4,6 +4,7 @@ import com.tiwilli.bechosystem.model.dao.SalesDao;
 import com.tiwilli.bechosystem.model.dao.factories.DaoFactory;
 import com.tiwilli.bechosystem.model.entities.Clothes;
 import com.tiwilli.bechosystem.model.entities.Sales;
+import com.tiwilli.bechosystem.model.entities.enums.ClothesStatus;
 
 import java.util.List;
 
@@ -55,5 +56,4 @@ public class SalesService {
         }
         return sum;
     }
-
 }

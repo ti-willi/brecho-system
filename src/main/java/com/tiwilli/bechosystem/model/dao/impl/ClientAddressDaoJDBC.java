@@ -35,7 +35,7 @@ public class ClientAddressDaoJDBC implements ClientAddressDao {
             st.setString(3, obj.getDistrict());
             st.setString(4, obj.getStreet());
             st.setString(5, obj.getAddressComplement());
-            st.setInt(6, obj.getNumber());
+            st.setString(6, obj.getNumber());
             st.setString(7, obj.getZipCode());
 
             int rowsAffected = st.executeUpdate();
@@ -77,7 +77,7 @@ public class ClientAddressDaoJDBC implements ClientAddressDao {
             st.setString(3, obj.getDistrict());
             st.setString(4, obj.getStreet());
             st.setString(5, obj.getAddressComplement());
-            st.setInt(6, obj.getNumber());
+            st.setString(6, obj.getNumber());
             st.setString(7, obj.getZipCode());
             st.setInt(8, obj.getId());
 
@@ -176,7 +176,7 @@ public class ClientAddressDaoJDBC implements ClientAddressDao {
         obj.setDistrict(rs.getString("district"));
         obj.setStreet(rs.getString("street"));
         obj.setAddressComplement(rs.getString("address_complement"));
-        obj.setNumber(rs.getInt("number"));
+        obj.setNumber(rs.getString("number"));
         obj.setZipCode(rs.getString("zip_code"));
         return obj;
     }

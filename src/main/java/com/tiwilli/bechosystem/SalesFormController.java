@@ -1,6 +1,7 @@
 package com.tiwilli.bechosystem;
 
 import com.tiwilli.bechosystem.db.DbException;
+import com.tiwilli.bechosystem.db.DbIntegrityException;
 import com.tiwilli.bechosystem.gui.exceptions.ValidationException;
 import com.tiwilli.bechosystem.gui.listeners.DataChangeListener;
 import com.tiwilli.bechosystem.gui.util.Alerts;
@@ -8,6 +9,7 @@ import com.tiwilli.bechosystem.gui.util.Utils;
 import com.tiwilli.bechosystem.model.entities.Client;
 import com.tiwilli.bechosystem.model.entities.Clothes;
 import com.tiwilli.bechosystem.model.entities.Sales;
+import com.tiwilli.bechosystem.model.entities.enums.ClothesStatus;
 import com.tiwilli.bechosystem.model.services.ClientService;
 import com.tiwilli.bechosystem.model.services.ClothesService;
 import com.tiwilli.bechosystem.model.services.SalesService;
@@ -132,6 +134,8 @@ public class SalesFormController implements Initializable, DataChangeListener {
 
             for (Clothes item : entity.getClothes()) {
                 item.setSales(entity);
+                item.setStatus(ClothesStatus.SOLD);
+                item.setSalesDate(entity.getSalesDate());
                 clothesService.saveOrUpdate(item);
             }
 
@@ -140,11 +144,60 @@ public class SalesFormController implements Initializable, DataChangeListener {
             Utils.currentStage(event).close();
         }
         catch (ValidationException e) {
-            //setErrorMessages(e.getErrors());
+            setErrorMessages(e.getErrors());
         }
         catch (DbException e) {
             e.printStackTrace();
             Alerts.showAlert("Erro!", null, "Erro ao salvar o objeto", Alert.AlertType.ERROR);
+        }
+    }
+
+    @FXML
+    public void onBtCancelAction(ActionEvent event) {
+        Utils.currentStage(event).close();
+    }
+
+    @FXML
+    public void onBtFindClientAction(ActionEvent event) {
+        Stage parentStage = Utils.currentStage(event);
+        Sales obj = new Sales();
+        createClientDialogForm(obj, "SalesClientList.fxml", parentStage);
+    }
+
+    @FXML
+    public void onBtAddProductAction(ActionEvent event) {
+        Stage parentStage = Utils.currentStage(event);
+        Sales obj = new Sales();
+        createProductDialogForm(obj, "SalesProductList.fxml", parentStage);
+    }
+
+    @FXML
+    public void onBtRemoveProductAction() {
+        Clothes obj = tableViewProducts.getSelectionModel().getSelectedItem();
+        if (obj != null) {
+            Optional<ButtonType> result = Alerts.showConfirmation("Confirmação", "Tem certeza que deseja excluir?");
+
+            if (result.get() == ButtonType.OK) {
+                if (service == null) {
+                    throw new IllegalStateException("Service was null");
+                }
+                if (clothesService == null) {
+                    throw new IllegalStateException("ClothesService was null");
+                }
+                try {
+                    entity.getClothes().remove(obj);
+                    obj.setStatus(ClothesStatus.NOT_POSTED);
+                    obj.setSales(null);
+                    clothesService.saveOrUpdate(obj);
+                    tableViewProducts.getItems().remove(obj);
+                }
+                catch (DbIntegrityException e) {
+                    Alerts.showAlert("Erro!", null, "Você não pode remover uma venda com produtos cadastrados! Remova os produtos para desfazer a venda", Alert.AlertType.ERROR);
+                }
+            }
+        }
+        else {
+            Alerts.showAlert("Nenhum salese selecionado", null, "Selecione um salese para excluir", Alert.AlertType.WARNING);
         }
     }
 
@@ -160,6 +213,10 @@ public class SalesFormController implements Initializable, DataChangeListener {
         ValidationException exception = new ValidationException("Validation error");
 
         obj.setId(Utils.tryParseToInt(labelIdValue.getText()));
+
+        if (txtClientName.getText() == null || txtClientName.getText().trim().isEmpty()) {
+            exception.addError("name", "Campo requerido");
+        }
         obj.setClient(client);
 
         for (Clothes item : entity.getClothes()) {
@@ -187,25 +244,6 @@ public class SalesFormController implements Initializable, DataChangeListener {
         }
 
         return obj;
-    }
-
-    @FXML
-    public void onBtCancelAction(ActionEvent event) {
-        Utils.currentStage(event).close();
-    }
-
-    @FXML
-    public void onBtFindClientAction(ActionEvent event) {
-        Stage parentStage = Utils.currentStage(event);
-        Sales obj = new Sales();
-        createClientDialogForm(obj, "SalesClientList.fxml", parentStage);
-    }
-
-    @FXML
-    public void onBtAddProductAction(ActionEvent event) {
-        Stage parentStage = Utils.currentStage(event);
-        Sales obj = new Sales();
-        createProductDialogForm(obj, "SalesProductList.fxml", parentStage);
     }
 
     @Override
@@ -243,7 +281,8 @@ public class SalesFormController implements Initializable, DataChangeListener {
             Utils.formatDatePicker(dpSalesDate, "dd/MM/yyyy");
         }
 
-        setTableViewProducts();
+        List<Clothes> clothesList = clothesService.findBySales(entity);
+        loadTableViewProducts(clothesList);
 
     }
 
@@ -258,8 +297,7 @@ public class SalesFormController implements Initializable, DataChangeListener {
         }
     }
 
-    private void setTableViewProducts() {
-        List<Clothes> clothesList = clothesService.findBySales(entity);
+    private void loadTableViewProducts(List<Clothes> clothesList) {
         entity.getClothes().addAll(clothesList);
         observableList = FXCollections.observableArrayList(clothesList);
         tableViewProducts.setItems(observableList);
@@ -345,18 +383,11 @@ public class SalesFormController implements Initializable, DataChangeListener {
         });
     }
 
-    /*private void setErrorMessages(Map<String, String> errors) {
+    private void setErrorMessages(Map<String, String> errors) {
         Set<String> fields = errors.keySet();
 
-        labelErrorName.setText(fields.contains("name") ? errors.get("name") : "");
-        labelErrorZipCode.setText(fields.contains("zipCode") ? errors.get("zipCode") : "");
-        labelErrorState.setText(fields.contains("state") ? errors.get("state") : "");
-        labelErrorCity.setText(fields.contains("city") ? errors.get("city") : "");
-        labelErrorDistrict.setText(fields.contains("district") ? errors.get("district") : "");
-        labelErrorStreet.setText(fields.contains("street") ? errors.get("street") : "");
-        labelErrorAddressComplement.setText(fields.contains("addressComplement") ? errors.get("addressComplement") : "");
-        labelErrorAddressNumber.setText(fields.contains("number") ? errors.get("number") : "");
+        labelErrorClientName.setText(fields.contains("name") ? errors.get("name") : "");
 
-    }*/
+    }
 
 }
