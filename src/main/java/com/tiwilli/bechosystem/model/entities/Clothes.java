@@ -103,7 +103,12 @@ public class Clothes {
     }
 
     public ClothesStatus getStatus() {
-        return ClothesStatus.valueOf(status);
+        if (status == null) {
+            return ClothesStatus.AVAILABLE;
+        }
+        else {
+            return ClothesStatus.valueOf(status);
+        }
     }
 
     public void setStatus(ClothesStatus status) {

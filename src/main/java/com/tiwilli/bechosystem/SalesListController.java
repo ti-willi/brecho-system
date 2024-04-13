@@ -4,13 +4,10 @@ import com.tiwilli.bechosystem.db.DbIntegrityException;
 import com.tiwilli.bechosystem.gui.listeners.DataChangeListener;
 import com.tiwilli.bechosystem.gui.util.Alerts;
 import com.tiwilli.bechosystem.gui.util.Utils;
-import com.tiwilli.bechosystem.model.entities.Clothes;
 import com.tiwilli.bechosystem.model.entities.Sales;
-import com.tiwilli.bechosystem.model.services.ClientAddressService;
 import com.tiwilli.bechosystem.model.services.ClientService;
 import com.tiwilli.bechosystem.model.services.ClothesService;
 import com.tiwilli.bechosystem.model.services.SalesService;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -145,13 +142,21 @@ public class SalesListController implements Initializable, DataChangeListener {
             createClientDataList(obj,"SalesClientDataList.fxml", parentStage);
         }
         else {
-            Alerts.showAlert("Nenhum salese selecionado", null, "Selecione um sales para editar", Alert.AlertType.WARNING);
+            Alerts.showAlert("Nenhum cliente selecionado", null, "Selecione uma venda para carregar os dados do cliente", Alert.AlertType.WARNING);
         }
     }
 
     @FXML
     public void onBtProductAction(ActionEvent event) {
-        System.out.println("btProduct");
+        Sales obj = salesTableView.getSelectionModel().getSelectedItem();
+
+        if (obj != null) {
+            Stage parentStage = Utils.currentStage(event);
+            createClothesDataList(obj,"SalesClothesDataList.fxml", parentStage);
+        }
+        else {
+            Alerts.showAlert("Nenhum cliente selecionado", null, "Selecione uma venda para carregar os dados dos produtos", Alert.AlertType.WARNING);
+        }
     }
 
     @Override
@@ -240,9 +245,33 @@ public class SalesListController implements Initializable, DataChangeListener {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
             Pane pane = loader.load();
 
-            SalesClientListDataController controller = loader.getController();
+            SalesClientDataListController controller = loader.getController();
             controller.setClient(obj.getClient());
             controller.setService(new ClientService());
+            controller.updateFormData();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Entre com os dados do salese");
+            dialogStage.setScene(new Scene(pane));
+            dialogStage.setResizable(false);
+            dialogStage.initOwner(parentStage);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.showAndWait();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            Alerts.showAlert("IO Exception", "Error loading view", e.getMessage(), Alert.AlertType.ERROR);
+        }
+    }
+
+    private void createClothesDataList(Sales obj, String absoluteName, Stage parentStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
+            Pane pane = loader.load();
+
+            SalesClothesDataListController controller = loader.getController();
+            controller.setSales(obj);
+            controller.setService(new ClothesService());
             controller.updateFormData();
 
             Stage dialogStage = new Stage();

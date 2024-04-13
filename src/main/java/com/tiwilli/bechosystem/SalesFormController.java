@@ -186,7 +186,7 @@ public class SalesFormController implements Initializable, DataChangeListener {
                 }
                 try {
                     entity.getClothes().remove(obj);
-                    obj.setStatus(ClothesStatus.NOT_POSTED);
+                    obj.setStatus(ClothesStatus.AVAILABLE);
                     obj.setSales(null);
                     clothesService.saveOrUpdate(obj);
                     tableViewProducts.getItems().remove(obj);

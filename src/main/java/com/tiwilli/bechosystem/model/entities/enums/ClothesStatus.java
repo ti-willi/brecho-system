@@ -2,12 +2,8 @@ package com.tiwilli.bechosystem.model.entities.enums;
 
 public enum ClothesStatus {
 
-    NOT_POSTED(1, "Não Postado"),
-    POSTED(2, "Postado"),
-    SOLD(3, "Vendido"),
-    SHOPPING_BAG(4, "Sacolinha"),
-    WAITING_SHIPMENT(5, "Aguardando envio"),
-    SHIPPED(6, "Enviado");
+    AVAILABLE(1, "Disponível"),
+    SOLD(2, "Vendido");
 
     private int code;
     private String description;

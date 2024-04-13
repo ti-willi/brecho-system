@@ -1,8 +1,6 @@
 package com.tiwilli.bechosystem;
 
 import com.tiwilli.bechosystem.model.entities.Client;
-import com.tiwilli.bechosystem.model.entities.ClientAddress;
-import com.tiwilli.bechosystem.model.services.ClientAddressService;
 import com.tiwilli.bechosystem.model.services.ClientService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -11,7 +9,7 @@ import javafx.scene.control.Label;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SalesClientListDataController implements Initializable {
+public class SalesClientDataListController implements Initializable {
 
     @FXML
     private Label labelId;
@@ -63,6 +61,15 @@ public class SalesClientListDataController implements Initializable {
     }
 
     public void updateFormData() {
+        if (entity == null) {
+            throw new IllegalStateException("Entity was null");
+        }
+
+        if (service == null) {
+            throw new IllegalStateException("Service was null");
+        }
+
+
         entity = service.findById(entity.getId());
 
         labelId.setText(entity.getId().toString());

@@ -219,10 +219,9 @@ public class ClothesDaoJDBC implements ClothesDao {
 
         try {
             st = conn.prepareStatement("""
-                            SELECT clothes.*, category.name as cat_name, sales.id as sales_id
+                            SELECT clothes.*, category.name as cat_name
                             FROM clothes
                             INNER JOIN category ON clothes.category_id = category.id
-                            INNER JOIN sales ON clothes.sales_id = sales.id
                             ORDER BY UPPER(clothes.name)
                             """);
 

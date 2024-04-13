@@ -177,10 +177,7 @@ public class ClothesFormController implements Initializable {
             obj.setPostDate(Date.from(Instant.parse(instantPost)));
         }
 
-        if (labelStatus.getText() == null || labelStatus.getText().trim().isEmpty()) {
-            obj.setStatus(null);
-        }
-        obj.setStatus(ClothesStatus.valueOf(labelStatus.getText()));
+        obj.setStatus(ClothesStatus.fromDescription(labelStatus.getText()));
 
         if (comboBoxCategory.getValue() == null) {
             exception.addError("category", "Selecione uma categoria");
@@ -238,9 +235,6 @@ public class ClothesFormController implements Initializable {
         labelSalesDate.setText(Utils.formatLabelDate(entity.getSalesDate(), "dd/MM/yyyy"));
         labelPostDate.setText(Utils.formatLabelDate(entity.getPostDate(), "dd/MM/yyyy"));
 
-        if (entity.getStatus() == null) {
-            entity.setStatus(ClothesStatus.NOT_POSTED);
-        }
         labelStatus.setText(entity.getStatus().getDescription());
 
         comboBoxCategory.setValue(entity.getCategory());
