@@ -31,4 +31,8 @@ public class ClientService {
         dao.deleteById(obj.getId());
     }
 
+    public List<Client> findByName(String name) {
+        return dao.findByName(name);
+    }
+
 }

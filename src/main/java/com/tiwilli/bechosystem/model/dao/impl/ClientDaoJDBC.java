@@ -192,7 +192,55 @@ public class ClientDaoJDBC implements ClientDao {
             DB.closeResultSet(rs);
         }
     }
-    
+
+    @Override
+    public List<Client> findByName(String name) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            st = conn.prepareStatement("""
+                            SELECT client.*, client_address.state as addressState,
+                            client_address.city as addressCity,
+                            client_address.district as addressDistrict,
+                            client_address.street as addressStreet,
+                            client_address.address_complement as addressComplement,
+                            client_address.number as addressNumber,
+                            client_address.zip_code as addressZipCode
+                            FROM client
+                            INNER JOIN client_address ON client.address_id = client_address.id
+                            WHERE LOWER(client.name) LIKE LOWER(CONCAT('%', ?, '%'))
+                            """
+            );
+
+            st.setString(1, name);
+            rs = st.executeQuery();
+
+            List<Client> list = new ArrayList<>();
+            Map<Integer, ClientAddress> map = new HashMap<>();
+
+            while (rs.next()) {
+                ClientAddress address = map.get(rs.getInt("address_id"));
+
+                if (address == null) {
+                    address = instantiateClientAddress(rs);
+                    map.put(rs.getInt("address_id"), address);
+                }
+
+                Client obj = instantiateClient(rs, address);
+                list.add(obj);
+            }
+            return list;
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
     private Client instantiateClient(ResultSet rs, ClientAddress address) throws SQLException {
         Client obj = new Client();
         obj.setId(rs.getInt("id"));

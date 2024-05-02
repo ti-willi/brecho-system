@@ -20,13 +20,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ClientListController implements Initializable, DataChangeListener {
 
@@ -78,6 +76,12 @@ public class ClientListController implements Initializable, DataChangeListener {
 
     @FXML
     private Label labelAddressNumber;
+
+    @FXML
+    private TextField textFieldFindByName;
+
+    @FXML
+    private Button btFindByOk;
 
     @FXML
     private Button btRegister;
@@ -150,6 +154,16 @@ public class ClientListController implements Initializable, DataChangeListener {
         }
     }
 
+    @FXML
+    public void onBtFindByOk() {
+        String txtName = textFieldFindByName.getText();
+
+            List<Client> list = service.findByName(txtName);
+            observableList = FXCollections.observableArrayList(list);
+            clientTableView.setItems(observableList);
+
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeNodes();
@@ -168,6 +182,7 @@ public class ClientListController implements Initializable, DataChangeListener {
                     selectItemsClientTableView(newValue);
                 }
         );
+
     }
 
     private void selectItemsClientTableView(Client obj) {

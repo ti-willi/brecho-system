@@ -6,6 +6,8 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -16,6 +18,19 @@
 
 <VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tiwilli.bechosystem.ClientListController">
    <children>
+      <ToolBar prefHeight="53.0" prefWidth="1100.0">
+         <items>
+            <TextField fx:id="textFieldFindByName" prefHeight="26.0" prefWidth="177.0" promptText="Digite o nome" />
+            <Button fx:id="btFindByOk" mnemonicParsing="false" onAction="#onBtFindByOk" text="Buscar">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+         </items>
+         <padding>
+            <Insets left="30.0" />
+         </padding>
+      </ToolBar>
       <SplitPane dividerPositions="0.46083788706739526" VBox.vgrow="ALWAYS">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="517.0" prefWidth="472.0">

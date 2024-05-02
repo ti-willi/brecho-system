@@ -12,4 +12,6 @@ public interface ClientDao {
     void deleteById(Integer id);
     Client findById(Integer id);
     List<Client> findAll();
+
+    List<Client> findByName(String name);
 }
