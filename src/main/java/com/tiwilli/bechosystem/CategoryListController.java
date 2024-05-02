@@ -5,6 +5,7 @@ import com.tiwilli.bechosystem.gui.listeners.DataChangeListener;
 import com.tiwilli.bechosystem.gui.util.Alerts;
 import com.tiwilli.bechosystem.gui.util.Utils;
 import com.tiwilli.bechosystem.model.entities.Category;
+import com.tiwilli.bechosystem.model.entities.Client;
 import com.tiwilli.bechosystem.model.services.CategoryService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,6 +41,12 @@ public class CategoryListController implements Initializable, DataChangeListener
 
     @FXML
     private Label labelName;
+
+    @FXML
+    private TextField textFieldFindByName;
+
+    @FXML
+    private Button btFindByOk;
 
     @FXML
     private Button btRegister;
@@ -101,7 +108,15 @@ public class CategoryListController implements Initializable, DataChangeListener
             Alerts.showAlert("Nenhuma categoria selecionada", null, "Selecione uma categoria para excluir", Alert.AlertType.WARNING);
 
         }
+    }
 
+    @FXML
+    public void onBtFindByOk() {
+        String txtName = textFieldFindByName.getText();
+
+        List<Category> list = service.findByName(txtName);
+        observableList = FXCollections.observableArrayList(list);
+        categoryTableView.setItems(observableList);
     }
 
     @Override

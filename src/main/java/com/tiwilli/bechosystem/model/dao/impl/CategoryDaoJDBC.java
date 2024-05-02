@@ -155,4 +155,35 @@ public class CategoryDaoJDBC implements CategoryDao {
             DB.closeResultSet(rs);
         }
     }
+
+    @Override
+    public List<Category> findByName(String name) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            st = conn.prepareStatement("""
+                            SELECT * FROM category
+                            WHERE LOWER(category.name) LIKE LOWER(CONCAT('%', ?, '%'))
+                            """);
+
+            st.setString(1, name);
+            rs = st.executeQuery();
+
+            List<Category> list = new ArrayList<>();
+
+            while (rs.next()) {
+                Category obj = new Category(rs.getInt("id"), rs.getString("name"));
+                list.add(obj);
+            }
+            return list;
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
 }

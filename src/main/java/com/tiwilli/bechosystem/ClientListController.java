@@ -158,10 +158,9 @@ public class ClientListController implements Initializable, DataChangeListener {
     public void onBtFindByOk() {
         String txtName = textFieldFindByName.getText();
 
-            List<Client> list = service.findByName(txtName);
-            observableList = FXCollections.observableArrayList(list);
-            clientTableView.setItems(observableList);
-
+        List<Client> list = service.findByName(txtName);
+        observableList = FXCollections.observableArrayList(list);
+        clientTableView.setItems(observableList);
     }
 
     @Override

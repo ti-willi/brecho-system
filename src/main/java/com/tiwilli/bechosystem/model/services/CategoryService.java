@@ -30,4 +30,8 @@ public class CategoryService {
     public void remove(Category obj) {
         dao.deleteById(obj.getId());
     }
+
+    public List<Category> findByName(String name) {
+        return dao.findByName(name);
+    }
 }
