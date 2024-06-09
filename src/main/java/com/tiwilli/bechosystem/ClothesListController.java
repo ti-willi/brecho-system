@@ -3,7 +3,9 @@ package com.tiwilli.bechosystem;
 import com.tiwilli.bechosystem.db.DbIntegrityException;
 import com.tiwilli.bechosystem.gui.listeners.DataChangeListener;
 import com.tiwilli.bechosystem.gui.util.Alerts;
+import com.tiwilli.bechosystem.gui.util.Constraints;
 import com.tiwilli.bechosystem.gui.util.Utils;
+import com.tiwilli.bechosystem.model.entities.Category;
 import com.tiwilli.bechosystem.model.entities.Clothes;
 import com.tiwilli.bechosystem.model.services.CategoryService;
 import com.tiwilli.bechosystem.model.services.ClothesService;
@@ -20,13 +22,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ClothesListController implements Initializable, DataChangeListener {
 
@@ -80,6 +80,9 @@ public class ClothesListController implements Initializable, DataChangeListener 
     private Label labelStatus;
 
     @FXML
+    private TextField textFieldApply;
+
+    @FXML
     private Button btRegister;
 
     @FXML
@@ -88,14 +91,16 @@ public class ClothesListController implements Initializable, DataChangeListener 
     @FXML
     private Button btDelete;
 
+    @FXML
+    private Button btApply;
+
+    @FXML
+    private ComboBox<String> comboBoxFindBy;
+
     private ObservableList<Clothes> observableList;
 
     public void setClothesService(ClothesService service) {
         this.service = service;
-    }
-
-    public void setCategoryService(CategoryService categoryService) {
-        this.categoryService = categoryService;
     }
 
     @FXML
@@ -144,6 +149,48 @@ public class ClothesListController implements Initializable, DataChangeListener 
         }
     }
 
+    @FXML
+    private void onBtApply() {
+        List<Clothes> list = filteredList();
+        if (!list.isEmpty()) {
+            setItemsClothesTableView(list);
+        }
+        else {
+            Alerts.showAlert("Erro", null, "Elemento não encontrado", Alert.AlertType.INFORMATION);
+        }
+        textFieldApply.clear();
+
+    }
+
+    private List<Clothes> filteredList() {
+        try {
+            if (comboBoxFindBy.getValue().equals("Código")) {
+                Clothes obj = service.findById(Integer.parseInt(textFieldApply.getText()));
+                return List.of(obj);
+            }
+            else if (comboBoxFindBy.getValue().equals("Nome")) {
+                return service.findByName(textFieldApply.getText());
+            }
+            else if (comboBoxFindBy.getValue().equals("Tamanho")) {
+                return service.findBySize(textFieldApply.getText());
+            }
+            else if (comboBoxFindBy.getValue().equals("Categoria")) {
+                return service.findByCategory(textFieldApply.getText());
+            }
+            else {
+                return service.findAll();
+            }
+        }
+        catch (NullPointerException | NumberFormatException e) {
+            return List.of();
+        }
+    }
+
+    private void setItemsClothesTableView(List<Clothes> list) {
+        observableList = FXCollections.observableArrayList(list);
+        clothesTableView.setItems(observableList);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeNodes();
@@ -163,6 +210,9 @@ public class ClothesListController implements Initializable, DataChangeListener 
                     selectItemsClothesTableView(newValue);
                 }
         );
+
+        initializeComboBoxFindBy();
+
     }
 
     private void selectItemsClothesTableView(Clothes obj) {
@@ -206,6 +256,20 @@ public class ClothesListController implements Initializable, DataChangeListener 
         List<Clothes> list = service.findAll();
         observableList = FXCollections.observableArrayList(list);
         clothesTableView.setItems(observableList);
+    }
+
+    private List<String> insertComboBoxItems() {
+        return List.of("Todos", "Código", "Nome", "Tamanho", "Categoria");
+    }
+
+    public void loadComboBoxItems() {
+        ObservableList<String> obsList;
+        obsList = FXCollections.observableArrayList(insertComboBoxItems());
+        comboBoxFindBy.setItems(obsList);
+
+        if (comboBoxFindBy.getValue() == null) {
+            comboBoxFindBy.getSelectionModel().selectFirst();
+        }
     }
 
     private void createDialogForm(Clothes obj, String absoluteName, Stage parentStage) {
@@ -271,5 +335,20 @@ public class ClothesListController implements Initializable, DataChangeListener 
                 }
             }
         });
+    }
+
+    private void initializeComboBoxFindBy() {
+        Callback<ListView<String>, ListCell<String>> factory = lv -> new ListCell<>() {
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? "" : item);
+            }
+        };
+
+        comboBoxFindBy.setCellFactory(factory);
+        comboBoxFindBy.setButtonCell(factory.call(null));
+
     }
 }

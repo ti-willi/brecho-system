@@ -164,7 +164,7 @@ public class CategoryDaoJDBC implements CategoryDao {
         try {
             st = conn.prepareStatement("""
                             SELECT * FROM category
-                            WHERE LOWER(category.name) LIKE LOWER(CONCAT('%', ?, '%'))
+                            WHERE LOWER(category.name) LIKE LOWER(CONCAT(?, '%'))
                             """);
 
             st.setString(1, name);

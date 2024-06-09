@@ -209,7 +209,7 @@ public class ClientDaoJDBC implements ClientDao {
                             client_address.zip_code as addressZipCode
                             FROM client
                             INNER JOIN client_address ON client.address_id = client_address.id
-                            WHERE LOWER(client.name) LIKE LOWER(CONCAT('%', ?, '%'))
+                            WHERE LOWER(client.name) LIKE LOWER(CONCAT(?, '%'))
                             """
             );
 

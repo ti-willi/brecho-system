@@ -115,7 +115,7 @@ public class CategoryListController implements Initializable, DataChangeListener
         String txtName = textFieldFindByName.getText();
 
         List<Category> list = service.findByName(txtName);
-        observableList = FXCollections.observableArrayList(list);
+        System.out.println(list);
         categoryTableView.setItems(observableList);
     }
 

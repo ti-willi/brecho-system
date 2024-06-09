@@ -40,6 +40,7 @@ public class MainViewController implements Initializable {
         loadView("ClothesList.fxml", (ClothesListController controller) -> {
             controller.setClothesService(new ClothesService());
             controller.updateTableView();
+            controller.loadComboBoxItems();
         });
     }
 

@@ -3,8 +3,11 @@ package com.tiwilli.bechosystem.model.services;
 import com.tiwilli.bechosystem.model.dao.CategoryDao;
 import com.tiwilli.bechosystem.model.dao.factories.DaoFactory;
 import com.tiwilli.bechosystem.model.entities.Category;
+import javafx.scene.control.TableView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CategoryService {
 

@@ -126,4 +126,5 @@ public class Utils {
         Timestamp timestamp = rs.getTimestamp(columnLabel);
         return (timestamp != null) ? new java.util.Date(timestamp.getTime()) : null;
     }
+
 }

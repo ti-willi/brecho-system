@@ -253,7 +253,7 @@ public class ClothesDaoJDBC implements ClothesDao {
     }
 
     @Override
-    public List<Clothes> findByCategory(Category category) {
+    public List<Clothes> findByName(String name) {
         PreparedStatement st = null;
         ResultSet rs = null;
 
@@ -262,10 +262,133 @@ public class ClothesDaoJDBC implements ClothesDao {
                     SELECT clothes.*, category.name as cat_name
                     FROM clothes
                     INNER JOIN category ON clothes.category_id = category.id
-                    WHERE category_id = ?
+                    WHERE LOWER(clothes.name) LIKE LOWER(CONCAT(?, '%'))
                     ORDER BY UPPER(clothes.name)
                     """);
-            st.setInt(1, category.getId());
+            st.setString(1, name);
+            rs = st.executeQuery();
+
+            List<Clothes> list = new ArrayList<>();
+            Map<Integer, Category> map = new HashMap<>();
+
+            while (rs.next()) {
+
+                Category cat = map.get(rs.getInt("category_id"));
+                if (cat == null) {
+                    cat = instantiateCategory(rs);
+                    map.put(rs.getInt("category_id"), cat);
+                }
+
+                Clothes obj = instantiateClothes(rs, cat);
+                list.add(obj);
+            }
+            return list;
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
+    @Override
+    public List<Clothes> findBySize(String size) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            st = conn.prepareStatement("""
+                    SELECT clothes.*, category.name as cat_name
+                    FROM clothes
+                    INNER JOIN category ON clothes.category_id = category.id
+                    WHERE LOWER(clothes.size) LIKE LOWER(CONCAT(?, '%'))
+                    ORDER BY UPPER(clothes.name)
+                    """);
+            st.setString(1, size);
+            rs = st.executeQuery();
+
+            List<Clothes> list = new ArrayList<>();
+            Map<Integer, Category> map = new HashMap<>();
+
+            while (rs.next()) {
+
+                Category cat = map.get(rs.getInt("category_id"));
+                if (cat == null) {
+                    cat = instantiateCategory(rs);
+                    map.put(rs.getInt("category_id"), cat);
+                }
+
+                Clothes obj = instantiateClothes(rs, cat);
+                list.add(obj);
+            }
+            return list;
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
+    @Override
+    public List<Clothes> findByStatus(int status) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            st = conn.prepareStatement("""
+                    SELECT clothes.*, category.name as cat_name
+                    FROM clothes
+                    INNER JOIN category ON clothes.category_id = category.id
+                    WHERE clothes.status = ?
+                    ORDER BY UPPER(clothes.name)
+                    """);
+            st.setInt(1, status);
+            rs = st.executeQuery();
+
+            List<Clothes> list = new ArrayList<>();
+            Map<Integer, Category> map = new HashMap<>();
+
+            while (rs.next()) {
+
+                Category cat = map.get(rs.getInt("category_id"));
+                if (cat == null) {
+                    cat = instantiateCategory(rs);
+                    map.put(rs.getInt("category_id"), cat);
+                }
+
+                Clothes obj = instantiateClothes(rs, cat);
+                list.add(obj);
+            }
+            return list;
+        }
+        catch (SQLException e) {
+            throw new DbException(e.getMessage());
+        }
+        finally {
+            DB.closeStatement(st);
+            DB.closeResultSet(rs);
+        }
+    }
+
+    @Override
+    public List<Clothes> findByCategory(String categoryName) {
+        PreparedStatement st = null;
+        ResultSet rs = null;
+
+        try {
+            st = conn.prepareStatement("""
+                    SELECT clothes.*, category.name as cat_name
+                    FROM clothes
+                    INNER JOIN category ON clothes.category_id = category.id
+                    WHERE LOWER(category.name) LIKE LOWER(CONCAT(?, '%'))
+                    ORDER BY UPPER(clothes.name)
+                    """);
+            st.setString(1, categoryName);
             rs = st.executeQuery();
 
             List<Clothes> list = new ArrayList<>();
